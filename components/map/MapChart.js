@@ -1,5 +1,5 @@
 import React, {memo} from 'react';
-import {ComposableMap, Geographies, Geography, ZoomableGroup} from 'react-simple-maps';
+import {ComposableMap, Geographies, Geography, ZoomableGroup, Graticule} from 'react-simple-maps';
 
 const geoUrl =
     'https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json';
@@ -18,7 +18,8 @@ const MapChart = ({ setTooltipContent }) => {
     return (
         <>
             <ComposableMap data-tip="" projectionConfig={{ scale: 200 }}>
-                <ZoomableGroup>
+                <ZoomableGroup zoom={0.5}>
+                    <Graticule stroke="#E4E5E6" strokeWidth={0.5} />
                     <Geographies geography={geoUrl}>
                         {({ geographies }) =>
                             geographies.map(geo => (
