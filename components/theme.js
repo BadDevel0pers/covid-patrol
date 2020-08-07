@@ -67,9 +67,9 @@ const theme = createMuiTheme({
           display: 'flex',
           flexDirection: 'column',
           height: '100%',
-          paddingRight: '0 !important', // for prevent 3rd party padding set ¯\_(ツ)_/¯
         },
         html: {
+          height: '100%',
           minHeight: '100%',
         },
         '#__next': {
