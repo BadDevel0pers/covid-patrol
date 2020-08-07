@@ -1,5 +1,20 @@
 import React, {memo, useState} from 'react';
 import {ComposableMap, Geographies, Geography, Graticule} from 'react-simple-maps';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+  mapContainer: {
+    position: 'relative',
+  },
+  controlButtons: {
+    position: 'absolute',
+    top: '50%',
+    left: 0,
+    display: 'flex',
+    flexDirection: 'column',
+    transform: 'translateY(-50%)'
+  }
+});
 
 const geoUrl =
   'https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json';
@@ -15,22 +30,23 @@ const rounded = num => {
 };
 
 const MapChart = ({setTooltipContent}) => {
-  const [position, setPosition] = useState({coordinates: [0, 0], zoom: 100});
+  const classes = useStyles();
+  const [position, setPosition] = useState({coordinates: [0, 0], zoom: 120});
 
   function handleZoomIn() {
     if (position.zoom >= 400) return;
 
-    setPosition(pos => ({...pos, zoom: pos.zoom * 1.2}));
+    setPosition(pos => ({...pos, zoom: pos.zoom * 1.5}));
   }
 
   function handleZoomOut() {
     if (position.zoom <= 100) return;
 
-    setPosition(pos => ({...pos, zoom: pos.zoom / 1.2}));
+    setPosition(pos => ({...pos, zoom: pos.zoom / 1.5}));
   }
 
   return (
-    <>
+    <div className={classes.mapContainer}>
       <ComposableMap
         projectionConfig={{
           center: position.coordinates,
@@ -70,7 +86,7 @@ const MapChart = ({setTooltipContent}) => {
           }
         </Geographies>
       </ComposableMap>
-      <div>
+      <div className={classes.controlButtons}>
         <button onClick={handleZoomIn}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -97,7 +113,7 @@ const MapChart = ({setTooltipContent}) => {
           </svg>
         </button>
       </div>
-    </>
+    </div>
   );
 };
 
