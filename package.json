@@ -12,7 +12,9 @@
     "next": "9.5.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "roboto-fontface": "^0.10.0"
+    "roboto-fontface": "^0.10.0",
+    "react-simple-maps": "^2.1.2",
+    "react-tooltip": "^4.2.8"
   },
   "devDependencies": {
     "babel-plugin-transform-imports": "^2.0.0"
