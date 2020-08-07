@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Map from "../components/map/Map";
 
 export default function Home() {
   return (
@@ -12,6 +13,8 @@ export default function Home() {
         <h1>
           Welcome to Covid Patrol
         </h1>
+
+          <Map/>
       </main>
 
       <footer>
