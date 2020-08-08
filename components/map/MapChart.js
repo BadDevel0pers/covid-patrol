@@ -1,9 +1,10 @@
-import React, { memo, useState, useRef } from 'react'
+import React, { memo, useState } from 'react'
 import { ComposableMap, Geographies, Geography, Graticule } from 'react-simple-maps'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import WorldIcon from '@material-ui/icons/Public'
 import WorldLockIcon from '@material-ui/icons/VpnLockSharp'
+import { geoCentroid } from 'd3-geo'
 
 import MapPopover from './MapPopover'
 import MapSearch from './MapSearch'
@@ -53,12 +54,16 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
   }
 
   const handleClick = (event, geo) => {
+    console.log('geo', geo)
     const {
       properties: { ISO_A2: countryCode, NAME: countryName },
     } = geo
 
-    setAnchorEl(event.currentTarget)
+    console.log('geoCentroid(feat), ', geoCentroid(geo))
 
+    setPosition({ coordinates: geoCentroid(geo), zoom: 400 })
+
+    setAnchorEl(event.currentTarget)
     setPopoverContent(`${countryCode} ${countryName}`)
   }
 
@@ -144,7 +149,6 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
 
               return (
                 <Geography
-                  ref={geo.properties.NAME === 'UA' ? selectedCountry : null}
                   key={geo.rsmKey}
                   geography={geo}
                   onClick={event => handleClick(event, geo)}
