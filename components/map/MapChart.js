@@ -1,6 +1,8 @@
 import React, {memo, useState} from 'react';
 import {ComposableMap, Geographies, Geography, Graticule} from 'react-simple-maps';
 import { makeStyles } from '@material-ui/core/styles';
+import Popover from '@material-ui/core/Popover';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles({
   mapContainer: {
@@ -32,6 +34,7 @@ const rounded = num => {
 const MapChart = ({setTooltipContent}) => {
   const classes = useStyles();
   const [position, setPosition] = useState({coordinates: [0, 0], zoom: 120});
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
   function handleZoomIn() {
     if (position.zoom >= 400) return;
@@ -44,6 +47,17 @@ const MapChart = ({setTooltipContent}) => {
 
     setPosition(pos => ({...pos, zoom: pos.zoom / 1.5}));
   }
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
 
   return (
     <div className={classes.mapContainer}>
@@ -60,6 +74,7 @@ const MapChart = ({setTooltipContent}) => {
               <Geography
                 key={geo.rsmKey}
                 geography={geo}
+                onClick={handleClick}
                 onMouseEnter={() => {
                   const {NAME, POP_EST} = geo.properties;
                   setTooltipContent(`${NAME} — ${rounded(POP_EST)}`);
@@ -86,6 +101,22 @@ const MapChart = ({setTooltipContent}) => {
           }
         </Geographies>
       </ComposableMap>
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        <Typography className={classes.typography}>The content of the Popover.</Typography>
+      </Popover>
       <div className={classes.controlButtons}>
         <button onClick={handleZoomIn}>
           <svg
