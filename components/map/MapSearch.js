@@ -1,21 +1,23 @@
 import React, { memo, useState } from 'react'
 import TextField from '@material-ui/core/TextField'
 import IconButton from '@material-ui/core/IconButton'
+import Autocomplete from '@material-ui/lab/Autocomplete'
 import { makeStyles } from '@material-ui/core/styles'
 import SearchIcon from '@material-ui/icons/Search'
 import { geoCentroid } from 'd3-geo'
 import get from 'lodash/get'
 import head from 'lodash/head'
 
+import countryToFlag from '../../helpers/countryToFlagCode'
+
 const useStyles = makeStyles(
   {
-    root: {},
-    inputWrapper: {
-      display: 'flex',
-    },
-    countryList: {
-      maxHeight: 200,
-      overflowY: 'scroll',
+    option: {
+      fontSize: 15,
+      '& > span': {
+        marginRight: 10,
+        fontSize: 18,
+      },
     },
   },
   { name: 'MapSearch' }
@@ -31,72 +33,57 @@ function MapSearch({
   setPopoverContent,
 }) {
   const classes = useStyles()
-  const [searchedText, setSearchedText] = useState('')
-  const [geoData, setGeoData] = useState(geographies)
+  const handleSearch = (event, geoItem) => {
+    if (geoItem) {
+      const {
+        properties: { ISO_A2: countryCode, NAME: countryName },
+      } = geoItem
 
-  const handleSelectSearchedCountry = geoItem => {
-    const {
-      properties: { ISO_A2: countryCode, NAME: countryName },
-    } = geoItem
-
-    setPosition({ coordinates: geoCentroid(geoItem), zoom: 400 })
-    setSelectedCountry(countryCode)
-    setAnchorEl(document.getElementById(countryCode))
-    setPopoverContent(`${countryCode} ${countryName}`)
-  }
-
-  const handleChangeSearchText = event => {
-    setSearchedText(event.target.value.toLowerCase())
-
-    setGeoData(
-      geographies.filter(geoItem =>
-        get(geoItem, 'properties.NAME', '')
-          .toLowerCase()
-          .includes(searchedText)
-      )
-    )
-  }
-
-  const handleSubmit = event => {
-    event.preventDefault()
-
-    if (geoData.length === 1) {
-      const selectedGeoItem = head(geoData)
-
-      setSearchedText(get(selectedGeoItem, 'properties.NAME', ''))
-      handleSelectSearchedCountry(selectedGeoItem)
+      setPosition({ coordinates: geoCentroid(geoItem), zoom: 400 })
+      setSelectedCountry(countryCode)
+      setAnchorEl(document.getElementById(countryCode))
+      setPopoverContent(`${countryCode} ${countryName}`)
+    } else {
+      setSelectedCountry(null)
+      setAnchorEl(null)
+      setPopoverContent(null)
     }
   }
 
-  const renderList = () => {
-    return geoData.map(geoItem => {
-      const countryName = get(geoItem, 'properties.NAME', '')
-
-      return (
-        <div key={`search-item-${countryName}`} onClick={() => handleSelectSearchedCountry(geoItem)}>
-          <span>{countryName}</span>
-        </div>
-      )
-    })
-  }
-
   return (
-    <div className={classes.root}>
-      <form className={classes.inputWrapper} onSubmit={handleSubmit}>
+    <Autocomplete
+      id="search-countries"
+      style={{ width: 300 }}
+      options={geographies}
+      classes={{
+        option: classes.option,
+      }}
+      autoHighlight
+      getOptionLabel={geoItem => geoItem.properties.NAME}
+      renderOption={geoItem => {
+        const {
+          properties: { ISO_A2: countryCode, NAME: countryName },
+        } = geoItem
+
+        return (
+          <>
+            <span>{countryToFlag(countryCode)}</span>
+            {countryName}
+          </>
+        )
+      }}
+      onChange={handleSearch}
+      renderInput={params => (
         <TextField
-          label="Country Name"
+          {...params}
+          label="Choose a country"
           variant="outlined"
-          onChange={handleChangeSearchText}
           inputProps={{
-            value: searchedText,
+            ...params.inputProps,
           }}
         />
-        <IconButton aria-label="search" color="primary">
-          <SearchIcon />
-        </IconButton>
-      </form>
-      <div className={classes.countryList}>{renderList()}</div>
-    </div>
+      )}
+    />
   )
 }
 
