@@ -1,20 +1,22 @@
-import React, {memo, useState} from 'react';
-import Popover from '@material-ui/core/Popover';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { memo, useState } from 'react'
+import Popover from '@material-ui/core/Popover'
+import Typography from '@material-ui/core/Typography'
+import { makeStyles } from '@material-ui/core/styles'
 
-const useStyles = makeStyles({
-  root: {
-    padding: 15,
+const useStyles = makeStyles(
+  {
+    root: {
+      padding: 15,
+    },
   },
-}, {name: 'MapPopover'});
+  { name: 'MapPopover' }
+)
 
+function MapPopover({ anchorEl, content, onClose }) {
+  const classes = useStyles()
 
-function MapPopover({anchorEl, content, onClose}) {
-  const classes = useStyles();
-
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
+  const open = Boolean(anchorEl)
+  const id = open ? 'simple-popover' : undefined
 
   return (
     <Popover
@@ -32,12 +34,10 @@ function MapPopover({anchorEl, content, onClose}) {
       }}
     >
       <div className={classes.root}>
-        <Typography>
-          {content}
-        </Typography>
+        <Typography>{content}</Typography>
       </div>
     </Popover>
-  );
+  )
 }
 
 export default memo(MapPopover)

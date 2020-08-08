@@ -13,8 +13,8 @@ const useStyles = makeStyles(theme => ({
   content: {
     padding: theme.spacing(3),
     textAlign: 'center',
-    textTransform: 'uppercase'
-  }
+    textTransform: 'uppercase',
+  },
 }))
 
 export default function Footer() {
@@ -24,9 +24,7 @@ export default function Footer() {
     <>
       <Container className={classes.root} maxWidth={false}>
         <Grid item xs={12}>
-          <div className={classes.content}>
-            Powered by bad-devs
-          </div>
+          <div className={classes.content}>Powered by bad-devs</div>
         </Grid>
       </Container>
     </>

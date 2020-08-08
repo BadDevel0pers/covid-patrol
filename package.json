@@ -19,6 +19,8 @@
     "react-tooltip": "^4.2.8"
   },
   "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "babel-loader": "^8.0.6",
     "babel-plugin-styled-components": "^1.11.1",
     "babel-plugin-transform-imports": "^2.0.0",
     "husky": "^3.0.7",
