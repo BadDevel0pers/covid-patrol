@@ -1,6 +1,8 @@
-import React, { memo } from 'react'
+import React, { memo, useState } from 'react'
 import TextField from '@material-ui/core/TextField'
+import IconButton from '@material-ui/core/IconButton'
 import Autocomplete from '@material-ui/lab/Autocomplete'
+import SearchIcon from '@material-ui/icons/Search'
 import { makeStyles } from '@material-ui/core/styles'
 import { geoCentroid } from 'd3-geo'
 
@@ -19,16 +21,10 @@ const useStyles = makeStyles(
   { name: 'MapSearch' }
 )
 
-function MapSearch({
-  geographies,
-  open,
-  selectedCountry,
-  setSelectedCountry,
-  setPosition,
-  setAnchorEl,
-  setPopoverContent,
-}) {
+function MapSearch({ geographies, setSelectedCountry, setPosition, setAnchorEl, setPopoverContent }) {
   const classes = useStyles()
+  const [isOpen, setIsOpen] = useState(false)
+
   const handleSearch = (event, geoItem) => {
     if (geoItem) {
       const {
@@ -44,6 +40,18 @@ function MapSearch({
       setAnchorEl(null)
       setPopoverContent(null)
     }
+  }
+
+  const handleSearchOpen = () => {
+    setIsOpen(true)
+  }
+
+  if (!isOpen) {
+    return (
+      <IconButton aria-label="search" color="primary" onClick={handleSearchOpen}>
+        <SearchIcon />
+      </IconButton>
+    )
   }
 
   return (
