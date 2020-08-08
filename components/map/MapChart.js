@@ -57,7 +57,6 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
   }
 
   const handleClick = (event, geo) => {
-    console.log('geo', geo)
     const {
       properties: { ISO_A2: countryCode, NAME: countryName },
     } = geo
