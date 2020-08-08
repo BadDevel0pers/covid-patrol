@@ -70,10 +70,7 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
       properties: { ISO_A2: countryCode, NAME: countryName },
     } = geo
 
-    console.log('geoCentroid(feat), ', geoCentroid(geo))
-
     setPosition({ coordinates: geoCentroid(geo), zoom: 400 })
-
     setAnchorEl(event.currentTarget)
     setPopoverContent(`${countryCode} ${countryName}`)
     setSelectedCountry(countryCode)
@@ -90,8 +87,6 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
   const handleUSAMapClick = () => {
     setIsWorldMapType(false)
   }
-
-  // return null
 
   return (
     <div className={classes.root}>
@@ -120,6 +115,8 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
         selectedCountry={selectedCountry}
         setSelectedCountry={setSelectedCountry}
         setPosition={setPosition}
+        setAnchorEl={setAnchorEl}
+        setPopoverContent={setPopoverContent}
       />
       <ComposableMap
         projectionConfig={{
@@ -146,6 +143,9 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
                   outline: 'none',
                 },
               }
+              const {
+                properties: { ISO_A2: countryCode, NAME: countryName },
+              } = geo
 
               // For demo
               if (!isWorldMapType) {
@@ -168,13 +168,12 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
 
               return (
                 <Geography
+                  id={countryCode}
                   key={geo.rsmKey}
                   geography={geo}
                   onClick={event => handleClick(event, geo)}
                   onMouseEnter={event => {
-                    const { NAME } = geo.properties
-
-                    setTooltipContent(NAME)
+                    setTooltipContent(countryName)
                     setTooltipAnchor(event.currentTarget)
                   }}
                   onMouseLeave={() => {

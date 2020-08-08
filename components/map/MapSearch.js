@@ -19,16 +19,26 @@ const useStyles = makeStyles(
   { name: 'MapSearch' }
 )
 
-function MapSearch({ geographies, open, selectedCountry, setSelectedCountry, setPosition }) {
+function MapSearch({
+  geographies,
+  open,
+  selectedCountry,
+  setSelectedCountry,
+  setPosition,
+  setAnchorEl,
+  setPopoverContent,
+}) {
   const classes = useStyles()
 
   const handleSelectSearchedCountry = geoItem => {
     const {
-      properties: { ISO_A2: countryCode },
+      properties: { ISO_A2: countryCode, NAME: countryName },
     } = geoItem
 
     setPosition({ coordinates: geoCentroid(geoItem), zoom: 400 })
     setSelectedCountry(countryCode)
+    setAnchorEl(document.getElementById(countryCode))
+    setPopoverContent(`${countryCode} ${countryName}`)
   }
 
   return (
