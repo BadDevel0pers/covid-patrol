@@ -1,4 +1,3 @@
-
 const plugins = [
   [
     'babel-plugin-transform-imports',
@@ -25,6 +24,7 @@ const plugins = [
       },
     },
   ],
+  ['styled-components', { ssr: true }],
 ]
 
 const presets = ['next/babel']
