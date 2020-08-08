@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useState } from 'react'
 import Popover from '@material-ui/core/Popover'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
@@ -9,36 +9,36 @@ const useStyles = makeStyles(
       pointerEvents: 'none',
     },
     paper: {
-      padding: 15,
+      padding: 10,
+      fontWeight: 700,
     },
   },
-  { name: 'MapPopover' }
+  { name: 'MapTooltip' }
 )
 
-function MapPopover({ anchorEl, content, onClose }) {
+function MapTooltip({ anchorEl, content }) {
   const classes = useStyles()
 
   return (
     <Popover
-      open={Boolean(anchorEl)}
-      anchorEl={anchorEl}
+      open={Boolean(content)}
       classes={{
         root: classes.root,
         paper: classes.paper,
       }}
-      onClose={onClose}
+      anchorEl={anchorEl}
       anchorOrigin={{
-        vertical: 'center',
+        vertical: 'bottom',
         horizontal: 'center',
       }}
       transformOrigin={{
-        vertical: 'center',
-        horizontal: 'left',
+        vertical: 'top',
+        horizontal: 'center',
       }}
     >
-      <Typography>{content}</Typography>
+      {content}
     </Popover>
   )
 }
 
-export default memo(MapPopover)
+export default memo(MapTooltip)

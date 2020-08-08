@@ -1,8 +1,8 @@
 import React, { memo, useState } from 'react'
-import ReactTooltip from 'react-tooltip'
 import { makeStyles } from '@material-ui/core/styles'
 
 import MapChart from './MapChart'
+import MapTooltip from './MapTooltip'
 
 const useStyles = makeStyles(
   {
@@ -13,12 +13,13 @@ const useStyles = makeStyles(
 
 function Map() {
   const [content, setContent] = useState('')
+  const [tooltipAnchorEl, setTooltipAnchor] = useState(null)
   const classes = useStyles()
 
   return (
     <div className={classes.mapRoot}>
-      <MapChart setTooltipContent={setContent} />
-      <ReactTooltip>{content}</ReactTooltip>
+      <MapChart setTooltipContent={setContent} setTooltipAnchor={setTooltipAnchor} />
+      <MapTooltip content={content} anchorEl={tooltipAnchorEl} />
     </div>
   )
 }

@@ -4,8 +4,12 @@ import { makeStyles, useTheme } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import WorldIcon from '@material-ui/icons/Public'
 import WorldLockIcon from '@material-ui/icons/VpnLockSharp'
+import { geoCentroid } from 'd3-geo'
+import { feature } from 'topojson-client'
 
 import MapPopover from './MapPopover'
+import MapSearch from './MapSearch'
+import mapData from '../../helpers/map/mapData'
 
 const styles = theme => ({
   root: {
@@ -28,15 +32,16 @@ const styles = theme => ({
 
 const useStyles = makeStyles(styles, { name: 'MapChart' })
 
-const geoUrl = 'https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json'
-
-const MapChart = ({ setTooltipContent }) => {
+const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
   const classes = useStyles()
   const theme = useTheme()
+
+  const [geographies] = useState(feature(mapData, mapData.objects[Object.keys(mapData.objects)[0]]).features)
   const [position, setPosition] = useState({ coordinates: [0, 0], zoom: 120 })
   const [anchorEl, setAnchorEl] = useState(null)
   const [popoverContent, setPopoverContent] = useState(null)
   const [isWorldMapType, setIsWorldMapType] = useState(true)
+  const [selectedCountry, setSelectedCountry] = useState(null)
 
   const handleZoomIn = () => {
     if (position.zoom >= 600) return
@@ -55,9 +60,10 @@ const MapChart = ({ setTooltipContent }) => {
       properties: { ISO_A2: countryCode, NAME: countryName },
     } = geo
 
+    setPosition({ coordinates: geoCentroid(geo), zoom: 400 })
     setAnchorEl(event.currentTarget)
-
     setPopoverContent(`${countryCode} ${countryName}`)
+    setSelectedCountry(countryCode)
   }
 
   const handleClose = () => {
@@ -94,6 +100,14 @@ const MapChart = ({ setTooltipContent }) => {
           For USA citizens
         </Button>
       </div>
+      <MapSearch
+        geographies={geographies}
+        selectedCountry={selectedCountry}
+        setSelectedCountry={setSelectedCountry}
+        setPosition={setPosition}
+        setAnchorEl={setAnchorEl}
+        setPopoverContent={setPopoverContent}
+      />
       <ComposableMap
         projectionConfig={{
           center: position.coordinates,
@@ -101,7 +115,7 @@ const MapChart = ({ setTooltipContent }) => {
         }}
       >
         <Graticule stroke="#E4E5E6" strokeWidth={0.5} />
-        <Geographies geography={geoUrl}>
+        <Geographies geography={geographies}>
           {({ geographies }) =>
             geographies.map((geo, index) => {
               const geographyStyles = {
@@ -119,6 +133,9 @@ const MapChart = ({ setTooltipContent }) => {
                   outline: 'none',
                 },
               }
+              const {
+                properties: { ISO_A2: countryCode, NAME: countryName },
+              } = geo
 
               // For demo
               if (!isWorldMapType) {
@@ -141,16 +158,17 @@ const MapChart = ({ setTooltipContent }) => {
 
               return (
                 <Geography
+                  id={countryCode}
                   key={geo.rsmKey}
                   geography={geo}
                   onClick={event => handleClick(event, geo)}
-                  onMouseEnter={() => {
-                    const { NAME, POP_EST } = geo.properties
-
-                    setTooltipContent(`${NAME} — ${POP_EST}`)
+                  onMouseEnter={event => {
+                    setTooltipContent(countryName)
+                    setTooltipAnchor(event.currentTarget)
                   }}
                   onMouseLeave={() => {
                     setTooltipContent('')
+                    setTooltipAnchor(null)
                   }}
                   style={geographyStyles}
                 />
