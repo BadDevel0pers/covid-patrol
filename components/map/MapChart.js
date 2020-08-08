@@ -31,7 +31,7 @@ const useStyles = makeStyles(
 
 const geoUrl = 'https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json'
 
-const MapChart = ({ setTooltipContent }) => {
+const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
   const classes = useStyles()
   const theme = useTheme()
   const [position, setPosition] = useState({ coordinates: [0, 0], zoom: 120 })
@@ -145,13 +145,15 @@ const MapChart = ({ setTooltipContent }) => {
                   key={geo.rsmKey}
                   geography={geo}
                   onClick={event => handleClick(event, geo)}
-                  onMouseEnter={() => {
-                    const { NAME, POP_EST } = geo.properties
+                  onMouseEnter={event => {
+                    const { NAME } = geo.properties
 
-                    setTooltipContent(`${NAME} — ${POP_EST}`)
+                    setTooltipContent(NAME)
+                    setTooltipAnchor(event.currentTarget)
                   }}
                   onMouseLeave={() => {
                     setTooltipContent('')
+                    setTooltipAnchor(null)
                   }}
                   style={geographyStyles}
                 />
