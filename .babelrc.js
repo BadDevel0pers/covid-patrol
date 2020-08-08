@@ -18,13 +18,9 @@ const plugins = [
         transform: '@material-ui/lab/${member}',
         preventFullImport: true,
       },
-      lodash: {
-        transform: 'lodash/${member}',
-        preventFullImport: true,
-      },
     },
   ],
-  ['styled-components', { ssr: true }],
+  ['styled-components', { ssr: true, displayName: true, preprocess: false }],
 ]
 
 const presets = ['next/babel']
