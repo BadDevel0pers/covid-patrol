@@ -134,39 +134,42 @@ const theme = createMuiTheme({
   },
   palette: {
     primary: {
-      main: '#EEEEEE',
+      light: '#7986cb',
+      main: '#3f51b5',
+      dark: '#303f9f',
       text: '#737373',
       contrastText: '#FFF',
       title: '#474747',
       border: '#BFBFBF',
-      sales: '#BA2235',
-      inventoryStatus: '#0E8B0B',
-      lowInventory: '#8A6D3B',
     },
     secondary: {
       main: '#737373',
       border: '#DDDDDD',
     },
     error: {
-      main: '#BA2235',
-      secondary: '#F8E8EA',
+      light: '#e57373',
+      main: '#f44336',
+      dark: '#d32f2f'
+    },
+    warning: {
+      light: '#ffb74d',
+      main: '#ff9800',
+      dark: '#f57c00',
+    },
+    success: {
+      light: '#81c784',
+      main: '#4caf50',
+      dark: '#388e3c',
     },
     background: {
       default: '#fff',
       footerBottom: '#EEEEEE',
       footerTop: '#FAFAFA',
     },
-    brand: {
-      black: '#000',
-      veryLightGrey: '#CCC',
-      charcoal: '#474747',
-      whiteSmoke: '#F5F5F5',
-      gainsboro: '#E3E3E3',
-      nero: '#222',
-      midnight: '#1C2F41',
-      transparent: 'rgba(255, 255, 255, 0)', // for a correct render on iOS
-    },
-    rating: '#E8B620',
+    map: {
+      default: '#eaeaea',
+      border: '#ddd'
+    }
   },
 })
 
