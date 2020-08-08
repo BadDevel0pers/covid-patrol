@@ -20,24 +20,16 @@ const useStyles = makeStyles(
       flexDirection: 'column',
       transform: 'translateY(-50%)',
     },
+    buttonContainer: {
+      '& button + button': {
+        marginLeft: 15,
+      },
+    },
   },
-  controlButtons: {
-    position: 'absolute',
-    top: '50%',
-    left: 0,
-    display: 'flex',
-    flexDirection: 'column',
-    transform: 'translateY(-50%)'
-  },
-  buttonContainer: {
-    '& button + button': {
-      marginLeft: 15,
-    }
-  }
-}, {name: 'MapChart'})
+  { name: 'MapChart' }
+)
 
 const geoUrl = 'https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json'
-
 
 const MapChart = ({ setTooltipContent }) => {
   const classes = useStyles()
@@ -48,14 +40,13 @@ const MapChart = ({ setTooltipContent }) => {
   const [isWorldMapType, setIsWorldMapType] = useState(true)
 
   const handleZoomIn = () => {
-    if (position.zoom >= 600) return;
-
+    if (position.zoom >= 600) return
 
     setPosition(pos => ({ ...pos, zoom: pos.zoom * 1.5 }))
   }
 
   const handleZoomOut = () => {
-    if (position.zoom <= 100) return;
+    if (position.zoom <= 100) return
 
     setPosition(pos => ({ ...pos, zoom: pos.zoom / 1.5 }))
   }
@@ -112,22 +103,22 @@ const MapChart = ({ setTooltipContent }) => {
       >
         <Graticule stroke="#E4E5E6" strokeWidth={0.5} />
         <Geographies geography={geoUrl}>
-          {({geographies}) =>
+          {({ geographies }) =>
             geographies.map((geo, index) => {
               const geographyStyles = {
                 default: {
                   fill: theme.palette.map.default,
-                  outline: "none",
-                  stroke:  theme.palette.map.border,
+                  outline: 'none',
+                  stroke: theme.palette.map.border,
                 },
                 hover: {
                   fill: theme.palette.warning.light,
-                  outline: "none",
+                  outline: 'none',
                 },
                 pressed: {
                   fill: theme.palette.warning.light,
-                  outline: "none",
-                }
+                  outline: 'none',
+                },
               }
 
               // For demo
@@ -149,18 +140,18 @@ const MapChart = ({ setTooltipContent }) => {
                 }
               }
 
-              return(
+              return (
                 <Geography
                   key={geo.rsmKey}
                   geography={geo}
-                  onClick={(event) => handleClick(event, geo)}
+                  onClick={event => handleClick(event, geo)}
                   onMouseEnter={() => {
-                    const {NAME, POP_EST} = geo.properties;
+                    const { NAME, POP_EST } = geo.properties
 
-                    setTooltipContent(`${NAME} — ${POP_EST}`);
+                    setTooltipContent(`${NAME} — ${POP_EST}`)
                   }}
                   onMouseLeave={() => {
-                    setTooltipContent("");
+                    setTooltipContent('')
                   }}
                   style={geographyStyles}
                 />
