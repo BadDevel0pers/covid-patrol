@@ -1,6 +1,9 @@
 import React, { memo, useState } from 'react'
 import { ComposableMap, Geographies, Geography, Graticule } from 'react-simple-maps'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, useTheme } from '@material-ui/core/styles'
+import Button from '@material-ui/core/Button'
+import WorldIcon from '@material-ui/icons/Public'
+import WorldLockIcon from '@material-ui/icons/VpnLockSharp'
 
 import MapPopover from './MapPopover'
 
@@ -18,25 +21,41 @@ const useStyles = makeStyles(
       transform: 'translateY(-50%)',
     },
   },
-  { name: 'MapChart' }
-)
+  controlButtons: {
+    position: 'absolute',
+    top: '50%',
+    left: 0,
+    display: 'flex',
+    flexDirection: 'column',
+    transform: 'translateY(-50%)'
+  },
+  buttonContainer: {
+    '& button + button': {
+      marginLeft: 15,
+    }
+  }
+}, {name: 'MapChart'})
 
 const geoUrl = 'https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json'
 
+
 const MapChart = ({ setTooltipContent }) => {
   const classes = useStyles()
+  const theme = useTheme()
   const [position, setPosition] = useState({ coordinates: [0, 0], zoom: 120 })
   const [anchorEl, setAnchorEl] = useState(null)
   const [popoverContent, setPopoverContent] = useState(null)
+  const [isWorldMapType, setIsWorldMapType] = useState(true)
 
-  function handleZoomIn() {
-    if (position.zoom >= 400) return
+  const handleZoomIn = () => {
+    if (position.zoom >= 600) return;
+
 
     setPosition(pos => ({ ...pos, zoom: pos.zoom * 1.5 }))
   }
 
-  function handleZoomOut() {
-    if (position.zoom <= 100) return
+  const handleZoomOut = () => {
+    if (position.zoom <= 100) return;
 
     setPosition(pos => ({ ...pos, zoom: pos.zoom / 1.5 }))
   }
@@ -55,8 +74,36 @@ const MapChart = ({ setTooltipContent }) => {
     setAnchorEl(null)
   }
 
+  const handleWorldMapClick = () => {
+    setIsWorldMapType(true)
+  }
+
+  const handleUSAMapClick = () => {
+    setIsWorldMapType(false)
+  }
+
   return (
     <div className={classes.root}>
+      <div className={classes.buttonContainer}>
+        <Button
+          variant="outlined"
+          color="primary"
+          className={classes.button}
+          endIcon={<WorldIcon />}
+          onClick={handleWorldMapClick}
+        >
+          World Map
+        </Button>
+        <Button
+          variant="outlined"
+          color="primary"
+          className={classes.button}
+          endIcon={<WorldLockIcon />}
+          onClick={handleUSAMapClick}
+        >
+          For USA citizens
+        </Button>
+      </div>
       <ComposableMap
         projectionConfig={{
           center: position.coordinates,
@@ -65,35 +112,60 @@ const MapChart = ({ setTooltipContent }) => {
       >
         <Graticule stroke="#E4E5E6" strokeWidth={0.5} />
         <Geographies geography={geoUrl}>
-          {({ geographies }) =>
-            geographies.map(geo => (
-              <Geography
-                key={geo.rsmKey}
-                geography={geo}
-                onClick={event => handleClick(event, geo)}
-                onMouseEnter={() => {
-                  const { NAME, POP_EST } = geo.properties
-                  setTooltipContent(`${NAME} — ${POP_EST}`)
-                }}
-                onMouseLeave={() => {
-                  setTooltipContent('')
-                }}
-                style={{
-                  default: {
-                    fill: '#D6D6DA',
-                    outline: 'none',
-                  },
-                  hover: {
-                    fill: '#F53',
-                    outline: 'none',
-                  },
-                  pressed: {
-                    fill: '#E42',
-                    outline: 'none',
-                  },
-                }}
-              />
-            ))
+          {({geographies}) =>
+            geographies.map((geo, index) => {
+              const geographyStyles = {
+                default: {
+                  fill: theme.palette.map.default,
+                  outline: "none",
+                  stroke:  theme.palette.map.border,
+                },
+                hover: {
+                  fill: theme.palette.warning.light,
+                  outline: "none",
+                },
+                pressed: {
+                  fill: theme.palette.warning.light,
+                  outline: "none",
+                }
+              }
+
+              // For demo
+              if (!isWorldMapType) {
+                geographyStyles.default.fill = theme.palette.error.main
+                geographyStyles.hover.fill = theme.palette.error.dark
+                geographyStyles.hover.pressed = theme.palette.error.dark
+
+                if (index % 2 === 1) {
+                  geographyStyles.default.fill = theme.palette.warning.main
+                  geographyStyles.hover.fill = theme.palette.warning.dark
+                  geographyStyles.hover.pressed = theme.palette.warning.dark
+                }
+
+                if (index % 5 === 1) {
+                  geographyStyles.default.fill = theme.palette.success.main
+                  geographyStyles.hover.fill = theme.palette.success.dark
+                  geographyStyles.hover.pressed = theme.palette.success.dark
+                }
+              }
+
+              return(
+                <Geography
+                  key={geo.rsmKey}
+                  geography={geo}
+                  onClick={(event) => handleClick(event, geo)}
+                  onMouseEnter={() => {
+                    const {NAME, POP_EST} = geo.properties;
+
+                    setTooltipContent(`${NAME} — ${POP_EST}`);
+                  }}
+                  onMouseLeave={() => {
+                    setTooltipContent("");
+                  }}
+                  style={geographyStyles}
+                />
+              )
+            })
           }
         </Geographies>
       </ComposableMap>
