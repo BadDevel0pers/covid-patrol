@@ -11,27 +11,26 @@ import MapPopover from './MapPopover'
 import MapSearch from './MapSearch'
 import mapData from '../../helpers/map/mapData'
 
-const useStyles = makeStyles(
-  {
-    root: {
-      position: 'relative',
-    },
-    controlButtons: {
-      position: 'absolute',
-      top: '50%',
-      left: 0,
-      display: 'flex',
-      flexDirection: 'column',
-      transform: 'translateY(-50%)',
-    },
-    buttonContainer: {
-      '& button + button': {
-        marginLeft: 15,
-      },
+const styles = theme => ({
+  root: {
+    position: 'relative',
+  },
+  controlButtons: {
+    position: 'absolute',
+    top: '50%',
+    left: 0,
+    display: 'flex',
+    flexDirection: 'column',
+    transform: 'translateY(-50%)',
+  },
+  buttonContainer: {
+    '& button + button': {
+      marginLeft: theme.spacing(3),
     },
   },
-  { name: 'MapChart' }
-)
+})
+
+const useStyles = makeStyles(styles, { name: 'MapChart' })
 
 const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
   const classes = useStyles()
