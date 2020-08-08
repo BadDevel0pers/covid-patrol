@@ -5,10 +5,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import MapChart from './MapChart';
 
 const useStyles = makeStyles({
-  mapRoot: {
+  root: {
 
   },
-});
+}, {name: 'Map'});
 
 
 function Map() {

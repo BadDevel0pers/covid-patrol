@@ -1,11 +1,11 @@
 import React, {memo, useState} from 'react';
 import {ComposableMap, Geographies, Geography, Graticule} from 'react-simple-maps';
 import { makeStyles } from '@material-ui/core/styles';
-import Popover from '@material-ui/core/Popover';
-import Typography from '@material-ui/core/Typography';
+
+import MapPopover from './MapPopover';
 
 const useStyles = makeStyles({
-  mapContainer: {
+  root: {
     position: 'relative',
   },
   controlButtons: {
@@ -16,25 +16,16 @@ const useStyles = makeStyles({
     flexDirection: 'column',
     transform: 'translateY(-50%)'
   }
-});
+}, {name: 'MapChart'});
 
 const geoUrl =
   'https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json';
 
-const rounded = num => {
-  if (num > 1000000000) {
-    return Math.round(num / 100000000) / 10 + "Bn";
-  } else if (num > 1000000) {
-    return Math.round(num / 100000) / 10 + "M";
-  } else {
-    return Math.round(num / 100) / 10 + "K";
-  }
-};
-
 const MapChart = ({setTooltipContent}) => {
   const classes = useStyles();
   const [position, setPosition] = useState({coordinates: [0, 0], zoom: 120});
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [popoverContent, setPopoverContent] = useState(null);
 
   function handleZoomIn() {
     if (position.zoom >= 400) return;
@@ -48,19 +39,21 @@ const MapChart = ({setTooltipContent}) => {
     setPosition(pos => ({...pos, zoom: pos.zoom / 1.5}));
   }
 
-  const handleClick = (event) => {
+  const handleClick = (event, geo) => {
+    const { properties: { ISO_A2: countryCode, NAME: countryName} } = geo
+
     setAnchorEl(event.currentTarget);
+
+    setPopoverContent(`${countryCode} ${countryName}`)
   };
 
   const handleClose = () => {
     setAnchorEl(null);
   };
 
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
 
   return (
-    <div className={classes.mapContainer}>
+    <div className={classes.root}>
       <ComposableMap
         projectionConfig={{
           center: position.coordinates,
@@ -74,10 +67,10 @@ const MapChart = ({setTooltipContent}) => {
               <Geography
                 key={geo.rsmKey}
                 geography={geo}
-                onClick={handleClick}
+                onClick={(event) => handleClick(event, geo)}
                 onMouseEnter={() => {
                   const {NAME, POP_EST} = geo.properties;
-                  setTooltipContent(`${NAME} — ${rounded(POP_EST)}`);
+                  setTooltipContent(`${NAME} — ${POP_EST}`);
                 }}
                 onMouseLeave={() => {
                   setTooltipContent("");
@@ -101,22 +94,7 @@ const MapChart = ({setTooltipContent}) => {
           }
         </Geographies>
       </ComposableMap>
-      <Popover
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-      >
-        <Typography className={classes.typography}>The content of the Popover.</Typography>
-      </Popover>
+      <MapPopover anchorEl={anchorEl} onClose={handleClose} content={popoverContent}/>
       <div className={classes.controlButtons}>
         <button onClick={handleZoomIn}>
           <svg
