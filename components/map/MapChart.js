@@ -68,6 +68,7 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
 
   const handleClose = () => {
     setAnchorEl(null)
+    setSelectedCountry(null)
   }
 
   const handleWorldMapClick = () => {
@@ -154,6 +155,10 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
                   geographyStyles.hover.fill = theme.palette.success.dark
                   geographyStyles.hover.pressed = theme.palette.success.dark
                 }
+              }
+
+              if (selectedCountry === countryCode) {
+                geographyStyles.default.fill = geographyStyles.hover.fill
               }
 
               return (

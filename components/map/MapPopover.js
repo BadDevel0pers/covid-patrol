@@ -5,9 +5,6 @@ import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(
   {
-    root: {
-      pointerEvents: 'none',
-    },
     paper: {
       padding: 15,
     },
@@ -23,7 +20,6 @@ function MapPopover({ anchorEl, content, onClose }) {
       open={Boolean(anchorEl)}
       anchorEl={anchorEl}
       classes={{
-        root: classes.root,
         paper: classes.paper,
       }}
       onClose={onClose}
