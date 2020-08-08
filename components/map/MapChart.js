@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from 'react'
+import React, { memo, useState } from 'react'
 import { ComposableMap, Geographies, Geography, Graticule } from 'react-simple-maps'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
@@ -37,20 +37,12 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
   const classes = useStyles()
   const theme = useTheme()
 
-  const [geographies, setGeographies] = useState([])
+  const [geographies] = useState(feature(mapData, mapData.objects[Object.keys(mapData.objects)[0]]).features)
   const [position, setPosition] = useState({ coordinates: [0, 0], zoom: 120 })
   const [anchorEl, setAnchorEl] = useState(null)
   const [popoverContent, setPopoverContent] = useState(null)
   const [isWorldMapType, setIsWorldMapType] = useState(true)
   const [selectedCountry, setSelectedCountry] = useState(null)
-
-  useEffect(() => {
-    if (mapData && mapData.objects) {
-      const features = feature(mapData, mapData.objects[Object.keys(mapData.objects)[0]]).features
-
-      setGeographies(features)
-    }
-  }, [])
 
   const handleZoomIn = () => {
     if (position.zoom >= 600) return
