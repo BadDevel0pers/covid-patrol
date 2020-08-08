@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react'
+import React, { memo, useState, useRef } from 'react'
 import { ComposableMap, Geographies, Geography, Graticule } from 'react-simple-maps'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
@@ -6,6 +6,7 @@ import WorldIcon from '@material-ui/icons/Public'
 import WorldLockIcon from '@material-ui/icons/VpnLockSharp'
 
 import MapPopover from './MapPopover'
+import MapSearch from './MapSearch'
 
 const useStyles = makeStyles(
   {
@@ -95,6 +96,7 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
           For USA citizens
         </Button>
       </div>
+      <MapSearch />
       <ComposableMap
         projectionConfig={{
           center: position.coordinates,
@@ -142,6 +144,7 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
 
               return (
                 <Geography
+                  ref={geo.properties.NAME === 'UA' ? selectedCountry : null}
                   key={geo.rsmKey}
                   geography={geo}
                   onClick={event => handleClick(event, geo)}

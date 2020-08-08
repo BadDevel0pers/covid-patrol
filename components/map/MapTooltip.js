@@ -16,7 +16,7 @@ const useStyles = makeStyles(
   { name: 'MapTooltip' }
 )
 
-function MapPopover({ anchorEl, content }) {
+function MapTooltip({ anchorEl, content }) {
   const classes = useStyles()
 
   return (
@@ -41,4 +41,4 @@ function MapPopover({ anchorEl, content }) {
   )
 }
 
-export default memo(MapPopover)
+export default memo(MapTooltip)
