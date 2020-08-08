@@ -149,7 +149,7 @@ const theme = createMuiTheme({
     error: {
       light: '#e57373',
       main: '#f44336',
-      dark: '#d32f2f'
+      dark: '#d32f2f',
     },
     warning: {
       light: '#ffb74d',
@@ -168,8 +168,8 @@ const theme = createMuiTheme({
     },
     map: {
       default: '#eaeaea',
-      border: '#ddd'
-    }
+      border: '#ddd',
+    },
   },
 })
 
