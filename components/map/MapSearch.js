@@ -1,12 +1,8 @@
-import React, { memo, useState } from 'react'
+import React, { memo } from 'react'
 import TextField from '@material-ui/core/TextField'
-import IconButton from '@material-ui/core/IconButton'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import { makeStyles } from '@material-ui/core/styles'
-import SearchIcon from '@material-ui/icons/Search'
 import { geoCentroid } from 'd3-geo'
-import get from 'lodash/get'
-import head from 'lodash/head'
 
 import countryToFlag from '../../helpers/countryToFlagCode'
 
@@ -64,7 +60,6 @@ function MapSearch({
         const {
           properties: { ISO_A2: countryCode, NAME: countryName },
         } = geoItem
-
         return (
           <>
             <span>{countryToFlag(countryCode)}</span>
