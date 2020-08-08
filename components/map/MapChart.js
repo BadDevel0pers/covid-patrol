@@ -87,7 +87,7 @@ const MapChart = ({setTooltipContent}) => {
           color="primary"
           className={classes.button}
           endIcon={<WorldLockIcon />}
-          conClick={handleUSAMapClick}
+          onClick={handleUSAMapClick}
         >
           For USA citizens
         </Button>
@@ -101,34 +101,56 @@ const MapChart = ({setTooltipContent}) => {
         <Graticule stroke="#E4E5E6" strokeWidth={0.5}/>
         <Geographies geography={geoUrl}>
           {({geographies}) =>
-            geographies.map(geo => {
+            geographies.map((geo, index) => {
+              const geographyStyles = {
+                default: {
+                  fill: theme.palette.map.default,
+                  outline: "none",
+                  stroke:  theme.palette.map.border,
+                },
+                hover: {
+                  fill: theme.palette.warning.light,
+                  outline: "none",
+                },
+                pressed: {
+                  fill: theme.palette.warning.light,
+                  outline: "none",
+                }
+              }
+
+              // For demo
+              if (!isWorldMapType) {
+                geographyStyles.default.fill = theme.palette.error.main
+                geographyStyles.hover.fill = theme.palette.error.dark
+                geographyStyles.hover.pressed = theme.palette.error.dark
+
+                if (index % 2 === 1) {
+                  geographyStyles.default.fill = theme.palette.warning.main
+                  geographyStyles.hover.fill = theme.palette.warning.dark
+                  geographyStyles.hover.pressed = theme.palette.warning.dark
+                }
+
+                if (index % 5 === 1) {
+                  geographyStyles.default.fill = theme.palette.success.main
+                  geographyStyles.hover.fill = theme.palette.success.dark
+                  geographyStyles.hover.pressed = theme.palette.success.dark
+                }
+              }
 
               return(
                 <Geography
                   key={geo.rsmKey}
                   geography={geo}
-                  onClick={(event) => handleClick(event, geo)}onMouseEnter={() => {
+                  onClick={(event) => handleClick(event, geo)}
+                  onMouseEnter={() => {
                     const {NAME, POP_EST} = geo.properties;
+
                     setTooltipContent(`${NAME} — ${POP_EST}`);
                   }}
                   onMouseLeave={() => {
                     setTooltipContent("");
                   }}
-                  style={{
-                    default: {
-                      fill: theme.palette.map.default,
-                      outline: "none",
-                      stroke:  theme.palette.map.border,
-                    },
-                    hover: {
-                      fill: theme.palette.warning.light,
-                      outline: "none",
-                    },
-                    pressed: {
-                      fill: theme.palette.warning.light,
-                      outline: "none",
-                    }
-                  }}
+                  style={geographyStyles}
                 />
               )
             })
