@@ -7,27 +7,26 @@ import WorldLockIcon from '@material-ui/icons/VpnLockSharp'
 
 import MapPopover from './MapPopover'
 
-const useStyles = makeStyles(
-  {
-    root: {
-      position: 'relative',
-    },
-    controlButtons: {
-      position: 'absolute',
-      top: '50%',
-      left: 0,
-      display: 'flex',
-      flexDirection: 'column',
-      transform: 'translateY(-50%)',
-    },
-    buttonContainer: {
-      '& button + button': {
-        marginLeft: 15,
-      },
+const styles = theme => ({
+  root: {
+    position: 'relative',
+  },
+  controlButtons: {
+    position: 'absolute',
+    top: '50%',
+    left: 0,
+    display: 'flex',
+    flexDirection: 'column',
+    transform: 'translateY(-50%)',
+  },
+  buttonContainer: {
+    '& button + button': {
+      marginLeft: theme.spacing(3),
     },
   },
-  { name: 'MapChart' }
-)
+})
+
+const useStyles = makeStyles(styles, { name: 'MapChart' })
 
 const geoUrl = 'https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json'
 
