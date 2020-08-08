@@ -1,15 +1,25 @@
-import React, {memo, useState} from 'react';
-import {ComposableMap, Geographies, Geography, Graticule} from 'react-simple-maps';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import WorldIcon from '@material-ui/icons/Public';
-import WorldLockIcon from '@material-ui/icons/VpnLockSharp';
+import React, { memo, useState } from 'react'
+import { ComposableMap, Geographies, Geography, Graticule } from 'react-simple-maps'
+import { makeStyles, useTheme } from '@material-ui/core/styles'
+import Button from '@material-ui/core/Button'
+import WorldIcon from '@material-ui/icons/Public'
+import WorldLockIcon from '@material-ui/icons/VpnLockSharp'
 
-import MapPopover from './MapPopover';
+import MapPopover from './MapPopover'
 
-const useStyles = makeStyles({
-  root: {
-    position: 'relative',
+const useStyles = makeStyles(
+  {
+    root: {
+      position: 'relative',
+    },
+    controlButtons: {
+      position: 'absolute',
+      top: '50%',
+      left: 0,
+      display: 'flex',
+      flexDirection: 'column',
+      transform: 'translateY(-50%)',
+    },
   },
   controlButtons: {
     position: 'absolute',
@@ -24,43 +34,45 @@ const useStyles = makeStyles({
       marginLeft: 15,
     }
   }
-}, {name: 'MapChart'});
+}, {name: 'MapChart'})
 
-const geoUrl =
-  'https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json';
+const geoUrl = 'https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json'
 
-const MapChart = ({setTooltipContent}) => {
-  const classes = useStyles();
-  const theme = useTheme();
-  const [position, setPosition] = useState({coordinates: [0, 0], zoom: 120});
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [popoverContent, setPopoverContent] = useState(null);
+
+const MapChart = ({ setTooltipContent }) => {
+  const classes = useStyles()
+  const theme = useTheme()
+  const [position, setPosition] = useState({ coordinates: [0, 0], zoom: 120 })
+  const [anchorEl, setAnchorEl] = useState(null)
+  const [popoverContent, setPopoverContent] = useState(null)
   const [isWorldMapType, setIsWorldMapType] = useState(true)
 
   const handleZoomIn = () => {
     if (position.zoom >= 600) return;
 
-    setPosition(pos => ({...pos, zoom: pos.zoom * 1.5}));
+
+    setPosition(pos => ({ ...pos, zoom: pos.zoom * 1.5 }))
   }
 
   const handleZoomOut = () => {
     if (position.zoom <= 100) return;
 
-    setPosition(pos => ({...pos, zoom: pos.zoom / 1.5}));
+    setPosition(pos => ({ ...pos, zoom: pos.zoom / 1.5 }))
   }
 
   const handleClick = (event, geo) => {
-    const { properties: { ISO_A2: countryCode, NAME: countryName} } = geo
+    const {
+      properties: { ISO_A2: countryCode, NAME: countryName },
+    } = geo
 
-    setAnchorEl(event.currentTarget);
+    setAnchorEl(event.currentTarget)
 
     setPopoverContent(`${countryCode} ${countryName}`)
-  };
+  }
 
   const handleClose = () => {
-    setAnchorEl(null);
-  };
-
+    setAnchorEl(null)
+  }
 
   const handleWorldMapClick = () => {
     setIsWorldMapType(true)
@@ -95,10 +107,10 @@ const MapChart = ({setTooltipContent}) => {
       <ComposableMap
         projectionConfig={{
           center: position.coordinates,
-          scale: position.zoom
+          scale: position.zoom,
         }}
       >
-        <Graticule stroke="#E4E5E6" strokeWidth={0.5}/>
+        <Graticule stroke="#E4E5E6" strokeWidth={0.5} />
         <Geographies geography={geoUrl}>
           {({geographies}) =>
             geographies.map((geo, index) => {
@@ -157,7 +169,7 @@ const MapChart = ({setTooltipContent}) => {
           }
         </Geographies>
       </ComposableMap>
-      <MapPopover anchorEl={anchorEl} onClose={handleClose} content={popoverContent}/>
+      <MapPopover anchorEl={anchorEl} onClose={handleClose} content={popoverContent} />
       <div className={classes.controlButtons}>
         <button onClick={handleZoomIn}>
           <svg
@@ -168,8 +180,8 @@ const MapChart = ({setTooltipContent}) => {
             stroke="currentColor"
             strokeWidth="3"
           >
-            <line x1="12" y1="5" x2="12" y2="19"/>
-            <line x1="5" y1="12" x2="19" y2="12"/>
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
           </svg>
         </button>
         <button onClick={handleZoomOut}>
@@ -181,12 +193,12 @@ const MapChart = ({setTooltipContent}) => {
             stroke="currentColor"
             strokeWidth="3"
           >
-            <line x1="5" y1="12" x2="19" y2="12"/>
+            <line x1="5" y1="12" x2="19" y2="12" />
           </svg>
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default memo(MapChart);
+export default memo(MapChart)
