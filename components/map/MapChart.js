@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { ComposableMap, Geographies, Geography, Graticule, ZoomableGroup } from 'react-simple-maps'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
@@ -7,6 +7,7 @@ import Switch from '@material-ui/core/Switch'
 import get from 'lodash/get'
 import { geoCentroid } from 'd3-geo'
 import { feature } from 'topojson-client'
+import fetch from 'isomorphic-fetch'
 
 import MapPopover from './MapPopover'
 import MapSideBar from './MapSideBar'
@@ -47,7 +48,18 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
   const [popoverContent, setPopoverContent] = useState(null)
   const [isWorldMapType, setIsWorldMapType] = useState(true)
   const [selectedCountry, setSelectedCountry] = useState(null)
+  const [countries, setCountries] = useState([])
   const mapHeight = getMapHeight()
+
+  async function getAllCountries() {
+    const res = await fetch('/api/countries')
+    const newData = await res.json()
+    setCountries(newData)
+  }
+
+  useEffect(() => {
+    getAllCountries()
+  }, [])
 
   const handleZoomIn = () => {
     if (position.zoom >= MAP_MAX_ZOOM) return
