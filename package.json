@@ -2,6 +2,11 @@
   "name": "covid-patrol",
   "version": "0.1.0",
   "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BadDevel0pers/covid-patrol.git"
+  },
+  "author": "Kholiavko Roman, Chyrva Aleksei",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
