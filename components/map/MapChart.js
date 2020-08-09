@@ -2,35 +2,18 @@ import React, { memo, useState } from 'react'
 import { ComposableMap, Geographies, Geography, Graticule } from 'react-simple-maps'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
-import IconButton from '@material-ui/core/IconButton'
 import WorldIcon from '@material-ui/icons/Public'
-import ZoomInIcon from '@material-ui/icons/Add'
-import ZoomOutIcon from '@material-ui/icons/Remove'
 import WorldLockIcon from '@material-ui/icons/VpnLockSharp'
 import { geoCentroid } from 'd3-geo'
 import { feature } from 'topojson-client'
 
 import MapPopover from './MapPopover'
-import MapSearch from './MapSearch'
+import MapSideBar from './MapSideBar'
 import mapData from '../../helpers/map/mapData'
 
 const styles = theme => ({
   root: {
     position: 'relative',
-  },
-  sideBar: {
-    position: 'absolute',
-    top: '50%',
-    left: 0,
-    transform: 'translateY(-50%)',
-  },
-  iconButton: {
-    width: 45,
-    height: 45,
-  },
-  controlButtons: {
-    display: 'flex',
-    flexDirection: 'column',
   },
   buttonContainer: {
     '& button + button': {
@@ -181,24 +164,16 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
       </ComposableMap>
       <MapPopover anchorEl={anchorEl} onClose={handleClose} content={popoverContent} />
 
-      <div className={classes.sideBar}>
-        <MapSearch
-          geographies={geographies}
-          selectedCountry={selectedCountry}
-          setSelectedCountry={setSelectedCountry}
-          setPosition={setPosition}
-          setAnchorEl={setAnchorEl}
-          setPopoverContent={setPopoverContent}
-        />
-        <div className={classes.controlButtons}>
-          <IconButton aria-label="zoom-in" color="primary" className={classes.iconButton} onClick={handleZoomIn}>
-            <ZoomInIcon />
-          </IconButton>
-          <IconButton aria-label="zoom-out" color="primary" className={classes.iconButton} onClick={handleZoomOut}>
-            <ZoomOutIcon />
-          </IconButton>
-        </div>
-      </div>
+      <MapSideBar
+        geographies={geographies}
+        selectedCountry={selectedCountry}
+        setSelectedCountry={setSelectedCountry}
+        setPosition={setPosition}
+        setAnchorEl={setAnchorEl}
+        setPopoverContent={setPopoverContent}
+        handleZoomIn={handleZoomIn}
+        handleZoomOut={handleZoomOut}
+      />
     </div>
   )
 }
