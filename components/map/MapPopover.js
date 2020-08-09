@@ -70,6 +70,7 @@ function MapPopover({ anchorEl, content, onClose }) {
           </Typography>
           <Rating
             name="customized-icons"
+            readOnly
             defaultValue={score}
             getLabelText={value => advisoryIcons[Math.trunc(value)].label}
             IconContainerComponent={IconContainer}
