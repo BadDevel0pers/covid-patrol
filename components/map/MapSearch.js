@@ -54,7 +54,7 @@ function MapSearch({ geographies, setSelectedCountry, setPosition, setAnchorEl, 
         properties: { ISO_A2: countryCode, NAME: countryName },
       } = geoItem
 
-      setPosition({ coordinates: geoCentroid(geoItem), zoom: 400 })
+      setPosition({ coordinates: geoCentroid(geoItem), zoom: 8 })
       setSelectedCountry(countryCode)
       setAnchorEl(document.getElementById(countryCode))
       setPopoverContent(`${countryCode} ${countryName}`)
