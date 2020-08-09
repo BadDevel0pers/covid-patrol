@@ -165,25 +165,40 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
                 geographies.map((geo, index) => {
                   const geographyStyles = {
                     default: {
-                      fill: theme.palette.map.default,
+                      fill: theme.palette.error.main,
                       outline: 'none',
                       stroke: theme.palette.map.border,
                       strokeWidth: '0.35',
                     },
                     hover: {
-                      fill: theme.palette.warning.light,
+                      fill: theme.palette.error.dark,
                       outline: 'none',
                     },
                     pressed: {
-                      fill: theme.palette.warning.light,
+                      fill: theme.palette.error.dark,
                       outline: 'none',
                     },
                   }
+
+                  // default: {
+                  //     fill: theme.palette.error.main,
+                  //       outline: 'none',
+                  //       stroke: theme.palette.map.border,
+                  //       strokeWidth: '0.35',
+                  //   },
+                  //   hover: {
+                  //     fill: theme.palette.warning.light,
+                  //       outline: 'none',
+                  //   },
+                  //   pressed: {
+                  //     fill: theme.palette.warning.light,
+                  //       outline: 'none',
+                  //   },
+                  // }
                   const {
                     properties: { ISO_A2: countryCode, NAME: countryName },
                   } = geo
 
-                  // For demo
                   if (!isWorldMapType) {
                     geographyStyles.default.fill = theme.palette.error.main
                     geographyStyles.hover.fill = theme.palette.error.dark
