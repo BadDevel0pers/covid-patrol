@@ -20,7 +20,6 @@ const styles = theme => ({
   root: {
     position: 'relative',
     maxHeight: '80vh',
-    background: '#b7b7b7',
   },
   buttonContainer: {
     '& button + button': {
@@ -65,8 +64,6 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
     }
   }
 
-  console.log(position)
-
   const handleMapMove = mapDetails => {
     console.log('mapDetails ', mapDetails)
     setPosition({
@@ -99,8 +96,6 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
     setIsWorldMapType(false)
   }
 
-  console.log('position ', position.coordinates)
-
   return (
     <div className={classes.root}>
       <div className={classes.buttonContainer}>
@@ -131,17 +126,7 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
         // }}
         height={mapHeight}
       >
-        <ZoomableGroup
-          zoom={position.zoom}
-          center={position.coordinates}
-          onMoveStart={pos => {
-            return false
-          }}
-          onMove={pos => {
-            return false
-          }}
-          onMoveEnd={handleMapMove}
-        >
+        <ZoomableGroup zoom={position.zoom} center={position.coordinates} onMoveEnd={handleMapMove}>
           <Graticule stroke={theme.palette.map.border} strokeWidth={0.5} onClick={handleClosePopover} />
           <Geographies geography={geographies}>
             {({ geographies }) =>

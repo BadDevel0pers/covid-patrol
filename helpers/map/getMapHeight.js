@@ -9,8 +9,7 @@ const MAP_DESKTOP_HEIGHT = 300
 function getMapHeight() {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
-  const isTablet = useMediaQuery(theme.breakpoints.up('sm'))
-  const isDesktop = useMediaQuery(theme.breakpoints.up('lg'))
+  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'lg'))
 
   if (isMobile) {
     return MAP_MOBILE_HEIGHT
@@ -20,9 +19,7 @@ function getMapHeight() {
     return MAP_TABLET_HEIGHT
   }
 
-  if (isDesktop) {
-    return MAP_DESKTOP_HEIGHT
-  }
+  return MAP_DESKTOP_HEIGHT
 }
 
 export default getMapHeight
