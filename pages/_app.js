@@ -4,6 +4,7 @@ import { MuiThemeProvider, makeStyles } from '@material-ui/core/styles'
 import theme from '../components/theme'
 import Footer from '../components/Footer'
 import Head from 'next/head'
+import HeaderNavbar from '../components/HeaderNavbar'
 
 const styles = () => ({
   main: {
@@ -14,9 +15,8 @@ const styles = () => ({
 const useStyles = makeStyles(styles)
 
 function MyApp({ Component, pageProps }) {
-  // remove it here
   useEffect(() => {
-    // Remove the server-side injected CSS.
+    // Remove the server-side injected CSS. https://github.com/mui-org/material-ui/issues/14327
     const jssStyles = document.querySelector('#jss-server-side')
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles)
@@ -34,6 +34,7 @@ function MyApp({ Component, pageProps }) {
       </Head>
       <MuiThemeProvider theme={theme}>
         <CssBaseline />
+        <HeaderNavbar />
         <main className={classes.main}>
           <Component {...pageProps} />
         </main>
