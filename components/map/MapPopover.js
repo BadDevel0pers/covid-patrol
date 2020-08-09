@@ -25,6 +25,16 @@ const useStyles = makeStyles(
       width: 45,
       height: 45,
     },
+    advisoryUpdate: {
+      marginTop: 15,
+    },
+    description: {
+      marginTop: 15,
+      marginBottom: 15,
+    },
+    title: {
+      marginBottom: 15,
+    },
   },
   { name: 'MapPopover' }
 )
@@ -62,8 +72,10 @@ function MapPopover({ anchorEl, content, onClose }) {
       }}
     >
       <div className={classes.wrapper}>
-        <Typography variant="h4">{name}</Typography>
-        <Divider />
+        <div className={classes.title}>
+          <Typography variant="h4">{name}</Typography>
+          <Divider />
+        </div>
         <Box>
           <Typography variant="caption" component="legend">
             <b>{isoName}</b> advisory index
@@ -76,10 +88,14 @@ function MapPopover({ anchorEl, content, onClose }) {
             IconContainerComponent={IconContainer}
           />
         </Box>
-        <Typography variant="caption">Advisory updated: {updated}</Typography>
+        <Typography variant="caption" component="div">
+          Advisory updated: {updated}
+        </Typography>
         <Box>
-          <div dangerouslySetInnerHTML={{ __html: description }} />
-          <Typography variant="caption">Updated: {lastUpdate}</Typography>
+          <div dangerouslySetInnerHTML={{ __html: description }} className={classes.description} />
+          <Typography variant="caption" className={classes.advisoryUpdate} component="div">
+            Updated: {lastUpdate}
+          </Typography>
         </Box>
         <IconButton aria-label="close" color="primary" className={classes.closeButton} onClick={onClose}>
           <CloseIcon />
