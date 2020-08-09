@@ -11,10 +11,11 @@ import fetch from 'isomorphic-fetch'
 
 import MapPopover from './MapPopover'
 import MapSideBar from './MapSideBar'
-import mapData from '../../helpers/map/mapData'
-import getMapHeight from '../../helpers/map/getMapHeight'
 import MapDestinations from './MapDestinations'
 import MapLegend from './MapLegend'
+import mapData from '../../helpers/map/mapData'
+import getMapHeight from '../../helpers/map/getMapHeight'
+import countryToFlag from '../../helpers/countryToFlagCode'
 
 const MAP_MIN_ZOOM = 0.66
 const MAP_MAX_ZOOM = 8
@@ -47,6 +48,7 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
   const [popoverContent, setPopoverContent] = useState(null)
   const [isWorldMapType, setIsWorldMapType] = useState(true)
   const [selectedCountry, setSelectedCountry] = useState(null)
+  const [countryFrom, setCountryFrom] = useState(null)
   const [countries, setCountries] = useState([])
   const mapHeight = getMapHeight()
 
@@ -59,6 +61,10 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
   useEffect(() => {
     getAllCountries()
   }, [])
+
+  useEffect(() => {
+    setIsWorldMapType(!Boolean(countryFrom))
+  }, [countryFrom])
 
   const handleZoomIn = () => {
     if (position.zoom >= MAP_MAX_ZOOM) return
@@ -126,13 +132,26 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
             geographies={geographies}
             onChange={handleCountryChange}
             handleClosePopover={handleClosePopover}
+            countryFrom={countryFrom}
+            onChangeCountryFrom={setCountryFrom}
           />
         </Grid>
         <Grid item>
           <label className={classes.switchLabel}>
-            <Typography variant="caption">for usa citizens</Typography>
-            <Switch checked={isWorldMapType} onChange={handleMapTypeChange} name="worldUsaSwitcher" />
-            <Typography variant="caption">worldwide</Typography>
+            {countryFrom && (
+              <Typography variant="body1" component="span">
+                For {countryToFlag(countryFrom)} {countryFrom} citizens
+              </Typography>
+            )}
+            <Switch
+              checked={isWorldMapType}
+              onChange={handleMapTypeChange}
+              name="worldUsaSwitcher"
+              disabled={!countryFrom}
+            />
+            <Typography variant="body1" component="span">
+              Worldwide
+            </Typography>
           </label>
         </Grid>
       </Grid>

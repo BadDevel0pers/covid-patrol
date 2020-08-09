@@ -3,14 +3,24 @@ import Grid from '@material-ui/core/Grid'
 
 import CountriesAutoComplete from '../CountriesAutoComplete'
 
-function MapDestinations({ geographies, onChange, handleClosePopover }) {
-  const defaultOriginCountry = geographies.find(geoItem => geoItem.properties.ISO_A2 === 'US')
-
+function MapDestinations({ geographies, onChange, onChangeCountryFrom, handleClosePopover }) {
   const handleCountryChange = (event, geoItem) => {
     if (geoItem) {
       onChange(null, geoItem)
     } else {
       handleClosePopover()
+    }
+  }
+
+  const handleChangeCountryFrom = (event, geoItem) => {
+    if (geoItem) {
+      const {
+        properties: { ISO_A2: countryCode },
+      } = geoItem
+
+      onChangeCountryFrom(countryCode)
+    } else {
+      onChangeCountryFrom(null)
     }
   }
 
@@ -20,10 +30,8 @@ function MapDestinations({ geographies, onChange, handleClosePopover }) {
         <CountriesAutoComplete
           id="country-from"
           options={geographies}
-          onChange={() => {}}
-          defaultValue={defaultOriginCountry}
+          onChange={handleChangeCountryFrom}
           label={'Country from'}
-          disabled
         />
       </Grid>
       <Grid md={1} item />
