@@ -13,6 +13,8 @@ import MapPopover from './MapPopover'
 import MapSideBar from './MapSideBar'
 import mapData from '../../helpers/map/mapData'
 import getMapHeight from '../../helpers/map/getMapHeight'
+import MapDestinations from './MapDestinations'
+import MapLegend from './MapLegend'
 
 const MAP_MIN_ZOOM = 0.66
 const MAP_MAX_ZOOM = 8
@@ -21,14 +23,11 @@ const MAP_ZOOM_MULTIPLIER = 1.5
 
 const styles = theme => ({
   root: {
-    position: 'relative',
-    maxHeight: '80vh',
-    overflow: 'hidden',
+    paddingTop: 30,
   },
-  buttonContainer: {
-    '& button + button': {
-      marginLeft: theme.spacing(3),
-    },
+  mapContainer: {
+    position: 'relative',
+    overflow: 'hidden',
   },
   switchLabel: {
     cursor: 'pointer',
@@ -90,7 +89,7 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
     })
   }
 
-  const handleSelectCountry = (event, geo) => {
+  const handleCountryChange = (event, geo) => {
     const {
       properties: { ISO_A2: countryCode, NAME: countryName },
     } = geo
@@ -100,6 +99,8 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
     setAnchorEl(selectedAreaElement)
     setPopoverContent(`${countryCode} ${countryName}`)
     setSelectedCountry(countryCode)
+
+    handleCloseTooltip()
   }
 
   const handleClosePopover = () => {
@@ -112,111 +113,110 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
     setIsWorldMapType(get(event, 'target.checked', false))
   }
 
+  const handleCloseTooltip = () => {
+    setTooltipContent('')
+    setTooltipAnchor(null)
+  }
+
   return (
     <div className={classes.root}>
-      <div className={classes.buttonContainer}>
-        <Grid container alignItems="center" spacing={1}>
-          <Grid item>
-            <label className={classes.switchLabel}>
-              <Typography variant="caption">for usa citizens</Typography>
-              <Switch checked={isWorldMapType} onChange={handleMapTypeChange} name="worldUsaSwitcher" />
-              <Typography variant="caption">worldwide</Typography>
-            </label>
-          </Grid>
+      <Grid container alignItems="center" justify="center" spacing={1}>
+        <Grid item xs={12}>
+          <MapDestinations
+            geographies={geographies}
+            onChange={handleCountryChange}
+            handleClosePopover={handleClosePopover}
+          />
         </Grid>
+        <Grid item>
+          <label className={classes.switchLabel}>
+            <Typography variant="caption">for usa citizens</Typography>
+            <Switch checked={isWorldMapType} onChange={handleMapTypeChange} name="worldUsaSwitcher" />
+            <Typography variant="caption">worldwide</Typography>
+          </label>
+        </Grid>
+      </Grid>
+
+      <div className={classes.mapContainer}>
+        <ComposableMap height={mapHeight}>
+          <ZoomableGroup zoom={position.zoom} center={position.coordinates} onMoveEnd={handleMapMove}>
+            <Graticule stroke={theme.palette.map.border} strokeWidth={0.4} />
+            <Geographies geography={geographies}>
+              {({ geographies }) =>
+                geographies.map((geo, index) => {
+                  const geographyStyles = {
+                    default: {
+                      fill: theme.palette.map.default,
+                      outline: 'none',
+                      stroke: theme.palette.map.border,
+                      strokeWidth: '0.35',
+                    },
+                    hover: {
+                      fill: theme.palette.warning.light,
+                      outline: 'none',
+                    },
+                    pressed: {
+                      fill: theme.palette.warning.light,
+                      outline: 'none',
+                    },
+                  }
+                  const {
+                    properties: { ISO_A2: countryCode, NAME: countryName },
+                  } = geo
+
+                  // For demo
+                  if (!isWorldMapType) {
+                    geographyStyles.default.fill = theme.palette.error.main
+                    geographyStyles.hover.fill = theme.palette.error.dark
+                    geographyStyles.hover.pressed = theme.palette.error.dark
+
+                    if (index % 2 === 1) {
+                      geographyStyles.default.fill = theme.palette.warning.main
+                      geographyStyles.hover.fill = theme.palette.warning.dark
+                      geographyStyles.hover.pressed = theme.palette.warning.dark
+                    }
+
+                    if (index % 5 === 1) {
+                      geographyStyles.default.fill = theme.palette.success.main
+                      geographyStyles.hover.fill = theme.palette.success.dark
+                      geographyStyles.hover.pressed = theme.palette.success.dark
+                    }
+                  }
+
+                  if (selectedCountry === countryCode) {
+                    geographyStyles.default.fill = geographyStyles.hover.fill
+                  }
+
+                  if (selectedCountry) {
+                    geographyStyles.hover.fill = theme.palette.map.default
+                  }
+
+                  return (
+                    <Geography
+                      id={countryCode}
+                      key={geo.rsmKey}
+                      geography={geo}
+                      onClick={event => handleCountryChange(event, geo)}
+                      onMouseEnter={event => {
+                        setTooltipContent(countryName)
+                        setTooltipAnchor(event.currentTarget)
+                      }}
+                      onMouseLeave={handleCloseTooltip}
+                      style={geographyStyles}
+                    />
+                  )
+                })
+              }
+            </Geographies>
+          </ZoomableGroup>
+        </ComposableMap>
+
+        <MapPopover anchorEl={anchorEl} onClose={handleClosePopover} content={popoverContent} />
+
+        <MapSideBar handleZoomIn={handleZoomIn} handleZoomOut={handleZoomOut} />
+
+        <MapLegend />
       </div>
-
-      <ComposableMap
-        // projectionConfig={{
-        //   center: position.coordinates,
-        //   scale: position.zoom,
-        // }}
-        height={mapHeight}
-      >
-        <ZoomableGroup zoom={position.zoom} center={position.coordinates} onMoveEnd={handleMapMove}>
-          <Graticule stroke={theme.palette.map.border} strokeWidth={0.5} onClick={handleClosePopover} />
-          <Geographies geography={geographies}>
-            {({ geographies }) =>
-              geographies.map((geo, index) => {
-                const geographyStyles = {
-                  default: {
-                    fill: theme.palette.map.default,
-                    outline: 'none',
-                    stroke: theme.palette.map.border,
-                    strokeWidth: '0.35',
-                  },
-                  hover: {
-                    fill: theme.palette.warning.light,
-                    outline: 'none',
-                  },
-                  pressed: {
-                    fill: theme.palette.warning.light,
-                    outline: 'none',
-                  },
-                }
-                const {
-                  properties: { ISO_A2: countryCode, NAME: countryName },
-                } = geo
-
-                // For demo
-                if (!isWorldMapType) {
-                  geographyStyles.default.fill = theme.palette.error.main
-                  geographyStyles.hover.fill = theme.palette.error.dark
-                  geographyStyles.hover.pressed = theme.palette.error.dark
-
-                  if (index % 2 === 1) {
-                    geographyStyles.default.fill = theme.palette.warning.main
-                    geographyStyles.hover.fill = theme.palette.warning.dark
-                    geographyStyles.hover.pressed = theme.palette.warning.dark
-                  }
-
-                  if (index % 5 === 1) {
-                    geographyStyles.default.fill = theme.palette.success.main
-                    geographyStyles.hover.fill = theme.palette.success.dark
-                    geographyStyles.hover.pressed = theme.palette.success.dark
-                  }
-                }
-
-                if (selectedCountry === countryCode) {
-                  geographyStyles.default.fill = geographyStyles.hover.fill
-                }
-
-                if (selectedCountry) {
-                  geographyStyles.hover.fill = theme.palette.map.default
-                }
-
-                return (
-                  <Geography
-                    id={countryCode}
-                    key={geo.rsmKey}
-                    geography={geo}
-                    onClick={event => handleSelectCountry(event, geo)}
-                    onMouseEnter={event => {
-                      setTooltipContent(countryName)
-                      setTooltipAnchor(event.currentTarget)
-                    }}
-                    onMouseLeave={() => {
-                      setTooltipContent('')
-                      setTooltipAnchor(null)
-                    }}
-                    style={geographyStyles}
-                  />
-                )
-              })
-            }
-          </Geographies>
-        </ZoomableGroup>
-      </ComposableMap>
-
-      <MapPopover anchorEl={anchorEl} onClose={handleClosePopover} content={popoverContent} />
-
-      <MapSideBar
-        geographies={geographies}
-        handleSelectCountry={handleSelectCountry}
-        handleClosePopover={handleClosePopover}
-        handleZoomIn={handleZoomIn}
-        handleZoomOut={handleZoomOut}
-      />
     </div>
   )
 }

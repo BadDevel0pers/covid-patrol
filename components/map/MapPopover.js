@@ -2,14 +2,24 @@ import React, { memo } from 'react'
 import Popover from '@material-ui/core/Popover'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
+import IconButton from '@material-ui/core/IconButton'
+import CloseIcon from '@material-ui/icons/Close'
 
 const useStyles = makeStyles(
   {
     root: {
-      pointerEvents: 'none',
+      backgroundColor: 'rgba(0, 0, 0, 0.32)',
     },
-    paper: {
-      padding: 15,
+    wrapper: {
+      position: 'relative',
+      padding: '30px 30px',
+    },
+    closeButton: {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      width: 45,
+      height: 45,
     },
   },
   { name: 'MapPopover' }
@@ -24,7 +34,6 @@ function MapPopover({ anchorEl, content, onClose }) {
       anchorEl={anchorEl}
       classes={{
         root: classes.root,
-        paper: classes.paper,
       }}
       onClose={onClose}
       anchorOrigin={{
@@ -36,7 +45,24 @@ function MapPopover({ anchorEl, content, onClose }) {
         horizontal: 'left',
       }}
     >
-      <Typography>{content}</Typography>
+      <div className={classes.wrapper}>
+        <Typography>{content}</Typography>
+        <Typography>{content}</Typography>
+        <Typography>{content}</Typography>
+        <Typography>
+          {content}
+          {content}
+          {content}
+          {content}
+        </Typography>
+        <Typography>{content}</Typography>
+        <Typography>{content}</Typography>
+        <Typography>{content}</Typography>
+
+        <IconButton aria-label="close" color="primary" className={classes.closeButton} onClick={onClose}>
+          <CloseIcon />
+        </IconButton>
+      </div>
     </Popover>
   )
 }

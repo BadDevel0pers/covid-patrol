@@ -4,10 +4,8 @@ import ZoomInIcon from '@material-ui/icons/Add'
 import ZoomOutIcon from '@material-ui/icons/Remove'
 import { makeStyles } from '@material-ui/core/styles'
 
-import MapSearch from './MapSearch'
-
 const useStyles = makeStyles(
-  {
+  theme => ({
     sideBar: {
       position: 'absolute',
       top: '50%',
@@ -17,25 +15,30 @@ const useStyles = makeStyles(
     iconButton: {
       width: 45,
       height: 45,
+      backgroundColor: theme.palette.background.default,
+      boxShadow:
+        'rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px',
+      '&:hover, &:active, &:focus': {
+        opacity: 1,
+        backgroundColor: theme.palette.background.hover,
+      },
     },
     controlButtons: {
       display: 'flex',
       flexDirection: 'column',
+      '& button + button': {
+        marginTop: 5,
+      },
     },
-  },
+  }),
   { name: 'MapSideBar' }
 )
 
-function MapSideBar({ geographies, handleClosePopover, handleSelectCountry, handleZoomIn, handleZoomOut }) {
+function MapSideBar({ handleZoomIn, handleZoomOut }) {
   const classes = useStyles()
 
   return (
     <div className={classes.sideBar}>
-      <MapSearch
-        geographies={geographies}
-        handleSelectCountry={handleSelectCountry}
-        handleClosePopover={handleClosePopover}
-      />
       <div className={classes.controlButtons}>
         <IconButton aria-label="zoom-in" color="primary" className={classes.iconButton} onClick={handleZoomIn}>
           <ZoomInIcon />
