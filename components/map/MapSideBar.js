@@ -4,8 +4,6 @@ import ZoomInIcon from '@material-ui/icons/Add'
 import ZoomOutIcon from '@material-ui/icons/Remove'
 import { makeStyles } from '@material-ui/core/styles'
 
-import MapSearch from './MapSearch'
-
 const useStyles = makeStyles(
   {
     sideBar: {
@@ -26,16 +24,11 @@ const useStyles = makeStyles(
   { name: 'MapSideBar' }
 )
 
-function MapSideBar({ geographies, handleClosePopover, handleCountryChange, handleZoomIn, handleZoomOut }) {
+function MapSideBar({ handleZoomIn, handleZoomOut }) {
   const classes = useStyles()
 
   return (
     <div className={classes.sideBar}>
-      <MapSearch
-        geographies={geographies}
-        handleCountryChange={handleCountryChange}
-        handleClosePopover={handleClosePopover}
-      />
       <div className={classes.controlButtons}>
         <IconButton aria-label="zoom-in" color="primary" className={classes.iconButton} onClick={handleZoomIn}>
           <ZoomInIcon />

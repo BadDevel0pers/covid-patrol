@@ -125,13 +125,7 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
       </Grid>
 
       <div className={classes.mapContainer}>
-        <ComposableMap
-          // projectionConfig={{
-          //   center: position.coordinates,
-          //   scale: position.zoom,
-          // }}
-          height={mapHeight}
-        >
+        <ComposableMap height={mapHeight}>
           <ZoomableGroup zoom={position.zoom} center={position.coordinates} onMoveEnd={handleMapMove}>
             <Graticule stroke={theme.palette.map.border} strokeWidth={0.4} />
             <Geographies geography={geographies}>
@@ -206,13 +200,7 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
 
         <MapPopover anchorEl={anchorEl} onClose={handleClosePopover} content={popoverContent} />
 
-        <MapSideBar
-          geographies={geographies}
-          handleCountryChange={handleCountryChange}
-          handleClosePopover={handleClosePopover}
-          handleZoomIn={handleZoomIn}
-          handleZoomOut={handleZoomOut}
-        />
+        <MapSideBar handleZoomIn={handleZoomIn} handleZoomOut={handleZoomOut} />
       </div>
     </div>
   )
