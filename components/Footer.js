@@ -11,9 +11,10 @@ const useStyles = makeStyles(theme => ({
     padding: 0,
   },
   content: {
-    padding: theme.spacing(3),
+    padding: theme.spacing(0.5),
+    fontSize: 12,
     textAlign: 'center',
-    textTransform: 'uppercase',
+    textTransform: 'capitalize',
   },
 }))
 
