@@ -77,7 +77,7 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
       properties: { ISO_A2: countryCode, NAME: countryName },
     } = geo
 
-    setPosition({ coordinates: geoCentroid(geo), zoom: 4 })
+    setPosition({ coordinates: geoCentroid(geo), zoom: MAP_MAX_ZOOM })
     setAnchorEl(event.currentTarget)
     setPopoverContent(`${countryCode} ${countryName}`)
     setSelectedCountry(countryCode)
