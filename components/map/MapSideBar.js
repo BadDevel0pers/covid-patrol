@@ -26,27 +26,15 @@ const useStyles = makeStyles(
   { name: 'MapSideBar' }
 )
 
-function MapSideBar({
-  geographies,
-  selectedCountry,
-  setSelectedCountry,
-  setPosition,
-  setAnchorEl,
-  setPopoverContent,
-  handleZoomIn,
-  handleZoomOut,
-}) {
+function MapSideBar({ geographies, handleClosePopover, handleSelectCountry, handleZoomIn, handleZoomOut }) {
   const classes = useStyles()
 
   return (
     <div className={classes.sideBar}>
       <MapSearch
         geographies={geographies}
-        selectedCountry={selectedCountry}
-        setSelectedCountry={setSelectedCountry}
-        setPosition={setPosition}
-        setAnchorEl={setAnchorEl}
-        setPopoverContent={setPopoverContent}
+        handleSelectCountry={handleSelectCountry}
+        handleClosePopover={handleClosePopover}
       />
       <div className={classes.controlButtons}>
         <IconButton aria-label="zoom-in" color="primary" className={classes.iconButton} onClick={handleZoomIn}>
