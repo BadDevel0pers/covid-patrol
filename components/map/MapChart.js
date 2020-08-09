@@ -66,7 +66,7 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
     setSelectedCountry(countryCode)
   }
 
-  const handleClose = () => {
+  const handleClosePopover = () => {
     setAnchorEl(null)
     setSelectedCountry(null)
   }
@@ -115,7 +115,7 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
           scale: position.zoom,
         }}
       >
-        <Graticule stroke="#E4E5E6" strokeWidth={0.5} />
+        <Graticule stroke={theme.palette.map.border} strokeWidth={0.5} onClick={handleClosePopover} />
         <Geographies geography={geographies}>
           {({ geographies }) =>
             geographies.map((geo, index) => {
@@ -161,6 +161,10 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
                 geographyStyles.default.fill = geographyStyles.hover.fill
               }
 
+              if (selectedCountry) {
+                geographyStyles.hover.fill = theme.palette.map.default
+              }
+
               return (
                 <Geography
                   id={countryCode}
@@ -182,7 +186,7 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
           }
         </Geographies>
       </ComposableMap>
-      <MapPopover anchorEl={anchorEl} onClose={handleClose} content={popoverContent} />
+      <MapPopover anchorEl={anchorEl} onClose={handleClosePopover} content={popoverContent} />
       <div className={classes.controlButtons}>
         <button onClick={handleZoomIn}>
           <svg
