@@ -17,7 +17,7 @@ function Map() {
   const classes = useStyles()
 
   return (
-    <div className={classes.mapRoot}>
+    <div className={classes.root}>
       <MapChart setTooltipContent={setContent} setTooltipAnchor={setTooltipAnchor} />
       <MapTooltip content={content} anchorEl={tooltipAnchorEl} />
     </div>
