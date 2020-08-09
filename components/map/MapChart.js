@@ -34,6 +34,12 @@ const styles = () => ({
     cursor: 'pointer',
     textTransform: 'capitalize',
   },
+  map: {
+    cursor: 'grab',
+    '&:focus, &:active': {
+      cursor: 'grabbing',
+    },
+  },
 })
 
 const useStyles = makeStyles(styles, { name: 'MapChart' })
@@ -162,7 +168,7 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
       </Grid>
 
       <div className={classes.mapContainer}>
-        <ComposableMap height={mapHeight}>
+        <ComposableMap height={mapHeight} className={classes.map}>
           <ZoomableGroup zoom={position.zoom} center={position.coordinates} onMoveEnd={handleMapMove}>
             <Graticule stroke={theme.palette.map.border} strokeWidth={0.4} />
             <Geographies geography={geographies}>
