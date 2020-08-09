@@ -1,13 +1,13 @@
+import React from 'react'
 import Map from '../components/map/Map'
+import { Container, Grid } from '@material-ui/core'
 
 export default function Home() {
   return (
-    <>
-      <h1>Welcome to Covid Patrol</h1>
-      {/*// TODO: remove, this is temporary*/}
-      <div style={{ height: '50vh' }} />
-      <Map />
-      <div style={{ height: '300vh' }} />
-    </>
+    <Container maxWidth={false}>
+      <Grid item>
+        <Map />
+      </Grid>
+    </Container>
   )
 }

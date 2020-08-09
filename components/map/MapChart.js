@@ -1,9 +1,10 @@
 import React, { memo, useState } from 'react'
 import { ComposableMap, Geographies, Geography, Graticule, ZoomableGroup } from 'react-simple-maps'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
-import WorldIcon from '@material-ui/icons/Public'
-import WorldLockIcon from '@material-ui/icons/VpnLockSharp'
+import Typography from '@material-ui/core/Typography'
+import Grid from '@material-ui/core/Grid'
+import Switch from '@material-ui/core/Switch'
+import get from 'lodash/get'
 import { geoCentroid } from 'd3-geo'
 import { feature } from 'topojson-client'
 
@@ -88,35 +89,26 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
     setSelectedCountry(null)
   }
 
-  const handleWorldMapClick = () => {
-    setIsWorldMapType(true)
-  }
-
-  const handleUSAMapClick = () => {
-    setIsWorldMapType(false)
+  const handleMapTypeChange = event => {
+    setIsWorldMapType(get(event, 'target.checked', false))
   }
 
   return (
     <div className={classes.root}>
       <div className={classes.buttonContainer}>
-        <Button
-          variant="outlined"
-          color="primary"
-          className={classes.button}
-          endIcon={<WorldIcon />}
-          onClick={handleWorldMapClick}
-        >
-          World Map
-        </Button>
-        <Button
-          variant="outlined"
-          color="primary"
-          className={classes.button}
-          endIcon={<WorldLockIcon />}
-          onClick={handleUSAMapClick}
-        >
-          For USA citizens
-        </Button>
+        <Typography component="div">
+          <Grid component="label" container alignItems="center" spacing={1}>
+            <Grid item>
+              <Typography variant="caption">for usa citizens</Typography>
+            </Grid>
+            <Grid item>
+              <Switch checked={isWorldMapType} onChange={handleMapTypeChange} name="worldUsaSwitcher" />
+            </Grid>
+            <Grid item>
+              <Typography variant="caption">worldwide</Typography>
+            </Grid>
+          </Grid>
+        </Typography>
       </div>
 
       <ComposableMap
