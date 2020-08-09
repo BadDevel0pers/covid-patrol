@@ -152,6 +152,7 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
                       strokeWidth: '0.35',
                     },
                     hover: {
+                      cursor: 'pointer',
                       fill: theme.palette.warning.light,
                       outline: 'none',
                     },
