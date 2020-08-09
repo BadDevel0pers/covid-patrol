@@ -99,17 +99,7 @@ function MapSearch({ geographies, setSelectedCountry, setPosition, setAnchorEl, 
               )
             }}
             onChange={handleSearch}
-            renderInput={params => (
-              <TextField
-                {...params}
-                label="Choose a country"
-                variant="outlined"
-                inputProps={{
-                  ...params.inputProps,
-                }}
-                autoFocus
-              />
-            )}
+            renderInput={params => <TextField {...params} label="Choose a country" variant="outlined" autoFocus />}
             autoHighlight
           />
           {isOpen && (
