@@ -5,7 +5,6 @@ import Autocomplete from '@material-ui/lab/Autocomplete'
 import SearchIcon from '@material-ui/icons/Search'
 import CloseIcon from '@material-ui/icons/Close'
 import { makeStyles } from '@material-ui/core/styles'
-import { geoCentroid } from 'd3-geo'
 import Slide from '@material-ui/core/Slide'
 import clsx from 'clsx'
 
@@ -22,13 +21,6 @@ const useStyles = makeStyles(
       backgroundColor: theme.palette.background.default,
       padding: 5,
       boxShadow: '2px 4px 12px 0px rgba(0,0,0,0.25)',
-    },
-    option: {
-      fontSize: 15,
-      '& > span': {
-        marginRight: 10,
-        fontSize: 18,
-      },
     },
     iconButton: {
       width: 45,

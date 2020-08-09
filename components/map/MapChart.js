@@ -12,6 +12,7 @@ import MapPopover from './MapPopover'
 import MapSideBar from './MapSideBar'
 import mapData from '../../helpers/map/mapData'
 import getMapHeight from '../../helpers/map/getMapHeight'
+import MapDestinations from './MapDestinations'
 
 const MAP_MIN_ZOOM = 0.66
 const MAP_MAX_ZOOM = 8
@@ -23,11 +24,7 @@ const styles = theme => ({
     position: 'relative',
     maxHeight: '80vh',
     overflow: 'hidden',
-  },
-  buttonContainer: {
-    '& button + button': {
-      marginLeft: theme.spacing(3),
-    },
+    paddingTop: 30,
   },
   switchLabel: {
     cursor: 'pointer',
@@ -102,17 +99,18 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
 
   return (
     <div className={classes.root}>
-      <div className={classes.buttonContainer}>
-        <Grid container alignItems="center" spacing={1}>
-          <Grid item>
-            <label className={classes.switchLabel}>
-              <Typography variant="caption">for usa citizens</Typography>
-              <Switch checked={isWorldMapType} onChange={handleMapTypeChange} name="worldUsaSwitcher" />
-              <Typography variant="caption">worldwide</Typography>
-            </label>
-          </Grid>
+      <Grid container alignItems="center" justify="center" spacing={1}>
+        <Grid item xs={12}>
+          <MapDestinations geographies={geographies} />
         </Grid>
-      </div>
+        <Grid item justify="center">
+          <label className={classes.switchLabel}>
+            <Typography variant="caption">for usa citizens</Typography>
+            <Switch checked={isWorldMapType} onChange={handleMapTypeChange} name="worldUsaSwitcher" />
+            <Typography variant="caption">worldwide</Typography>
+          </label>
+        </Grid>
+      </Grid>
 
       <ComposableMap
         // projectionConfig={{
