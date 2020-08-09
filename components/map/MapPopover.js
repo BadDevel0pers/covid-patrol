@@ -8,6 +8,7 @@ import { Box } from '@material-ui/core'
 import Rating from '@material-ui/lab/Rating'
 import Divider from '@material-ui/core/Divider'
 import advisoryIcons from '../../helpers/advisoryIcons'
+import countryToFlag from '../../helpers/countryToFlagCode'
 
 const useStyles = makeStyles(
   {
@@ -73,7 +74,9 @@ function MapPopover({ anchorEl, content, onClose }) {
     >
       <div className={classes.wrapper}>
         <div className={classes.title}>
-          <Typography variant="h4">{name}</Typography>
+          <Typography variant="h4">
+            {countryToFlag(isoName)} {name}
+          </Typography>
           <Divider />
         </div>
         <Box>
