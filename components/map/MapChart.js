@@ -2,7 +2,10 @@ import React, { memo, useState } from 'react'
 import { ComposableMap, Geographies, Geography, Graticule } from 'react-simple-maps'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
 import WorldIcon from '@material-ui/icons/Public'
+import ZoomInIcon from '@material-ui/icons/Add'
+import ZoomOutIcon from '@material-ui/icons/Remove'
 import WorldLockIcon from '@material-ui/icons/VpnLockSharp'
 import { geoCentroid } from 'd3-geo'
 import { feature } from 'topojson-client'
@@ -15,13 +18,19 @@ const styles = theme => ({
   root: {
     position: 'relative',
   },
-  controlButtons: {
+  sideBar: {
     position: 'absolute',
     top: '50%',
     left: 0,
+    transform: 'translateY(-50%)',
+  },
+  iconButton: {
+    width: 45,
+    height: 45,
+  },
+  controlButtons: {
     display: 'flex',
     flexDirection: 'column',
-    transform: 'translateY(-50%)',
   },
   buttonContainer: {
     '& button + button': {
@@ -100,14 +109,7 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
           For USA citizens
         </Button>
       </div>
-      <MapSearch
-        geographies={geographies}
-        selectedCountry={selectedCountry}
-        setSelectedCountry={setSelectedCountry}
-        setPosition={setPosition}
-        setAnchorEl={setAnchorEl}
-        setPopoverContent={setPopoverContent}
-      />
+
       <ComposableMap
         projectionConfig={{
           center: position.coordinates,
@@ -178,32 +180,24 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
         </Geographies>
       </ComposableMap>
       <MapPopover anchorEl={anchorEl} onClose={handleClose} content={popoverContent} />
-      <div className={classes.controlButtons}>
-        <button onClick={handleZoomIn}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth="3"
-          >
-            <line x1="12" y1="5" x2="12" y2="19" />
-            <line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
-        </button>
-        <button onClick={handleZoomOut}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth="3"
-          >
-            <line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
-        </button>
+
+      <div className={classes.sideBar}>
+        <MapSearch
+          geographies={geographies}
+          selectedCountry={selectedCountry}
+          setSelectedCountry={setSelectedCountry}
+          setPosition={setPosition}
+          setAnchorEl={setAnchorEl}
+          setPopoverContent={setPopoverContent}
+        />
+        <div className={classes.controlButtons}>
+          <IconButton aria-label="zoom-in" color="primary" className={classes.iconButton} onClick={handleZoomIn}>
+            <ZoomInIcon />
+          </IconButton>
+          <IconButton aria-label="zoom-out" color="primary" className={classes.iconButton} onClick={handleZoomOut}>
+            <ZoomOutIcon />
+          </IconButton>
+        </div>
       </div>
     </div>
   )

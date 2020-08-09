@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react'
+import React, { memo, useState, useEffect } from 'react'
 import TextField from '@material-ui/core/TextField'
 import IconButton from '@material-ui/core/IconButton'
 import Autocomplete from '@material-ui/lab/Autocomplete'
@@ -7,15 +7,21 @@ import CloseIcon from '@material-ui/icons/Close'
 import { makeStyles } from '@material-ui/core/styles'
 import { geoCentroid } from 'd3-geo'
 import Slide from '@material-ui/core/Slide'
+import clsx from 'clsx'
 
 import countryToFlag from '../../helpers/countryToFlagCode'
 
 const useStyles = makeStyles(
-  {
+  theme => ({
     root: {
       display: 'flex',
       alignItems: 'center',
-      minHeight: 58,
+      minHeight: 66,
+    },
+    searchBarContainer: {
+      backgroundColor: theme.palette.background.default,
+      padding: 5,
+      boxShadow: '2px 4px 12px 0px rgba(0,0,0,0.25)',
     },
     option: {
       fontSize: 15,
@@ -25,16 +31,22 @@ const useStyles = makeStyles(
       },
     },
     iconButton: {
-      width: 40,
-      height: 40,
+      width: 45,
+      height: 45,
     },
-  },
+  }),
   { name: 'MapSearch' }
 )
 
 function MapSearch({ geographies, setSelectedCountry, setPosition, setAnchorEl, setPopoverContent }) {
   const classes = useStyles()
   const [isOpen, setIsOpen] = useState(false)
+
+  useEffect(() => {
+    if (isOpen) {
+      setAnchorEl(null)
+    }
+  }, [isOpen])
 
   const handleSearch = (event, geoItem) => {
     if (geoItem) {
@@ -46,6 +58,7 @@ function MapSearch({ geographies, setSelectedCountry, setPosition, setAnchorEl, 
       setSelectedCountry(countryCode)
       setAnchorEl(document.getElementById(countryCode))
       setPopoverContent(`${countryCode} ${countryName}`)
+      setIsOpen(false)
     } else {
       setSelectedCountry(null)
       setAnchorEl(null)
@@ -65,7 +78,7 @@ function MapSearch({ geographies, setSelectedCountry, setPosition, setAnchorEl, 
         </IconButton>
       )}
       <Slide direction="right" in={isOpen} mountOnEnter unmountOnExit>
-        <div className={classes.root}>
+        <div className={clsx([classes.root, classes.searchBarContainer])}>
           <Autocomplete
             id="search-countries"
             style={{ width: 300 }}
