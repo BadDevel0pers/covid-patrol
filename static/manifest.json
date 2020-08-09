@@ -20,8 +20,7 @@
     {
       "src": "/static/icons/icon-196x196.png",
       "sizes": "196x196",
-      "type": "image/png",
-      "purpose": "maskable icon"
+      "type": "image/png"
     }
   ],
   "theme_color": "#3f51b5",
