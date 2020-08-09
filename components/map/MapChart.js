@@ -86,6 +86,8 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
     setAnchorEl(selectedAreaElement)
     setPopoverContent(`${countryCode} ${countryName}`)
     setSelectedCountry(countryCode)
+
+    handleCloseTooltip()
   }
 
   const handleClosePopover = () => {
@@ -96,6 +98,11 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
 
   const handleMapTypeChange = event => {
     setIsWorldMapType(get(event, 'target.checked', false))
+  }
+
+  const handleCloseTooltip = () => {
+    setTooltipContent('')
+    setTooltipAnchor(null)
   }
 
   return (
@@ -187,10 +194,7 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
                         setTooltipContent(countryName)
                         setTooltipAnchor(event.currentTarget)
                       }}
-                      onMouseLeave={() => {
-                        setTooltipContent('')
-                        setTooltipAnchor(null)
-                      }}
+                      onMouseLeave={handleCloseTooltip}
                       style={geographyStyles}
                     />
                   )
