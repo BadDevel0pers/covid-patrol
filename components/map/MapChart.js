@@ -21,7 +21,7 @@ const MAP_MAX_ZOOM = 8
 const MAP_SELECTED_COUNTRY_ZOOM = 3
 const MAP_ZOOM_MULTIPLIER = 1.5
 
-const styles = theme => ({
+const styles = () => ({
   root: {
     paddingTop: 30,
   },
@@ -91,13 +91,13 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
 
   const handleCountryChange = (event, geo) => {
     const {
-      properties: { ISO_A2: countryCode, NAME: countryName },
+      properties: { ISO_A2: countryCode },
     } = geo
     const selectedAreaElement = get(event, 'currentTarget', document.getElementById(countryCode))
 
     setPosition({ coordinates: geoCentroid(geo), zoom: MAP_SELECTED_COUNTRY_ZOOM })
     setAnchorEl(selectedAreaElement)
-    setPopoverContent(`${countryCode} ${countryName}`)
+    setPopoverContent(countries[countryCode])
     setSelectedCountry(countryCode)
 
     handleCloseTooltip()
@@ -210,11 +210,10 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
             </Geographies>
           </ZoomableGroup>
         </ComposableMap>
-
-        <MapPopover anchorEl={anchorEl} onClose={handleClosePopover} content={popoverContent} />
-
+        {popoverContent && anchorEl && (
+          <MapPopover anchorEl={anchorEl} onClose={handleClosePopover} content={popoverContent} />
+        )}
         <MapSideBar handleZoomIn={handleZoomIn} handleZoomOut={handleZoomOut} />
-
         <MapLegend />
       </div>
     </div>
