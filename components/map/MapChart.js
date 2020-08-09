@@ -126,7 +126,7 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
           height={mapHeight}
         >
           <ZoomableGroup zoom={position.zoom} center={position.coordinates} onMoveEnd={handleMapMove}>
-            <Graticule stroke={theme.palette.map.border} strokeWidth={0.5} onClick={handleClosePopover} />
+            <Graticule stroke={theme.palette.map.border} strokeWidth={0.4} />
             <Geographies geography={geographies}>
               {({ geographies }) =>
                 geographies.map((geo, index) => {
