@@ -1,0 +1,9 @@
+{
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "headers": { "cache-control": "s-maxage=86400" },
+      "dest": "/api/$1"
+    }
+  ]
+}
