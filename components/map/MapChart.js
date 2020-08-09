@@ -11,10 +11,11 @@ import fetch from 'isomorphic-fetch'
 
 import MapPopover from './MapPopover'
 import MapSideBar from './MapSideBar'
-import mapData from '../../helpers/map/mapData'
-import getMapHeight from '../../helpers/map/getMapHeight'
 import MapDestinations from './MapDestinations'
 import MapLegend from './MapLegend'
+import mapData from '../../helpers/map/mapData'
+import getMapHeight from '../../helpers/map/getMapHeight'
+import countryToFlag from '../../helpers/countryToFlagCode'
 
 const MAP_MIN_ZOOM = 0.66
 const MAP_MAX_ZOOM = 8
@@ -47,18 +48,28 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
   const [popoverContent, setPopoverContent] = useState(null)
   const [isWorldMapType, setIsWorldMapType] = useState(true)
   const [selectedCountry, setSelectedCountry] = useState(null)
-  const [countries, setCountries] = useState([])
+  const [selectedCountryFrom, setSelectedCountryFrom] = useState(null)
+  const [countries, setCountries] = useState(null)
   const mapHeight = getMapHeight()
 
   async function getAllCountries() {
-    const res = await fetch('/api/countries')
-    const newData = await res.json()
-    setCountries(newData)
+    try {
+      const res = await fetch('/api/countries')
+      const newData = await res.json()
+
+      setCountries(newData)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   useEffect(() => {
     getAllCountries()
   }, [])
+
+  useEffect(() => {
+    setIsWorldMapType(!Boolean(selectedCountryFrom))
+  }, [selectedCountryFrom])
 
   const handleZoomIn = () => {
     if (position.zoom >= MAP_MAX_ZOOM) return
@@ -126,13 +137,26 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
             geographies={geographies}
             onChange={handleCountryChange}
             handleClosePopover={handleClosePopover}
+            selectedCountryFrom={selectedCountryFrom}
+            onChangeCountryFrom={setSelectedCountryFrom}
           />
         </Grid>
         <Grid item>
           <label className={classes.switchLabel}>
-            <Typography variant="caption">for usa citizens</Typography>
-            <Switch checked={isWorldMapType} onChange={handleMapTypeChange} name="worldUsaSwitcher" />
-            <Typography variant="caption">worldwide</Typography>
+            {selectedCountryFrom && (
+              <Typography variant="body1" component="span">
+                For {countryToFlag(selectedCountryFrom)} {selectedCountryFrom} citizens
+              </Typography>
+            )}
+            <Switch
+              checked={isWorldMapType}
+              onChange={handleMapTypeChange}
+              name="worldUsaSwitcher"
+              disabled={!selectedCountryFrom}
+            />
+            <Typography variant="body1" component="span">
+              Worldwide
+            </Typography>
           </label>
         </Grid>
       </Grid>
@@ -143,52 +167,56 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
             <Graticule stroke={theme.palette.map.border} strokeWidth={0.4} />
             <Geographies geography={geographies}>
               {({ geographies }) =>
-                geographies.map((geo, index) => {
+                geographies.map(geo => {
                   const geographyStyles = {
                     default: {
-                      fill: theme.palette.map.default,
+                      fill: theme.palette.error.main,
                       outline: 'none',
                       stroke: theme.palette.map.border,
                       strokeWidth: '0.35',
                     },
                     hover: {
-                      fill: theme.palette.warning.light,
+                      fill: theme.palette.error.dark,
                       outline: 'none',
                     },
                     pressed: {
-                      fill: theme.palette.warning.light,
+                      fill: theme.palette.error.dark,
                       outline: 'none',
                     },
                   }
+
                   const {
                     properties: { ISO_A2: countryCode, NAME: countryName },
                   } = geo
+                  const currentCountry = countries && countries[countryCode]
 
-                  // For demo
-                  if (!isWorldMapType) {
-                    geographyStyles.default.fill = theme.palette.error.main
-                    geographyStyles.hover.fill = theme.palette.error.dark
-                    geographyStyles.hover.pressed = theme.palette.error.dark
-
-                    if (index % 2 === 1) {
+                  if (currentCountry) {
+                    if (currentCountry.restrictions === 2) {
                       geographyStyles.default.fill = theme.palette.warning.main
                       geographyStyles.hover.fill = theme.palette.warning.dark
                       geographyStyles.hover.pressed = theme.palette.warning.dark
                     }
 
-                    if (index % 5 === 1) {
+                    if (
+                      currentCountry.restrictions === 3 ||
+                      (!isWorldMapType &&
+                        selectedCountryFrom &&
+                        currentCountry.allowedFrom.includes(selectedCountryFrom))
+                    ) {
                       geographyStyles.default.fill = theme.palette.success.main
                       geographyStyles.hover.fill = theme.palette.success.dark
                       geographyStyles.hover.pressed = theme.palette.success.dark
                     }
+
+                    if (selectedCountry === countryCode) {
+                      geographyStyles.default.fill = geographyStyles.hover.fill
+                    }
                   }
 
-                  if (selectedCountry === countryCode) {
-                    geographyStyles.default.fill = geographyStyles.hover.fill
-                  }
-
-                  if (selectedCountry) {
-                    geographyStyles.hover.fill = theme.palette.map.default
+                  if ((!isWorldMapType && countryCode === selectedCountryFrom && countries) || !countries) {
+                    geographyStyles.default.fill = theme.palette.map.default
+                    geographyStyles.hover.fill = theme.palette.warning.dark
+                    geographyStyles.hover.pressed = theme.palette.warning.dark
                   }
 
                   return (
