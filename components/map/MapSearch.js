@@ -38,32 +38,23 @@ const useStyles = makeStyles(
   { name: 'MapSearch' }
 )
 
-function MapSearch({ geographies, setSelectedCountry, setPosition, setAnchorEl, setPopoverContent }) {
+function MapSearch({ geographies, handleSelectCountry, handleClosePopover }) {
   const classes = useStyles()
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     if (isOpen) {
-      setAnchorEl(null)
+      handleClosePopover()
     }
   }, [isOpen])
 
   const handleSearch = (event, geoItem) => {
     if (geoItem) {
-      const {
-        properties: { ISO_A2: countryCode, NAME: countryName },
-      } = geoItem
-
-      setPosition({ coordinates: geoCentroid(geoItem), zoom: 4 })
-      setAnchorEl(document.getElementById(countryCode))
-      setPopoverContent(`${countryCode} ${countryName}`)
-      setSelectedCountry(countryCode)
+      handleSelectCountry(null, geoItem)
 
       setIsOpen(false)
     } else {
-      setSelectedCountry(null)
-      setAnchorEl(null)
-      setPopoverContent(null)
+      handleClosePopover()
     }
   }
 

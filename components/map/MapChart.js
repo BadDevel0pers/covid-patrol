@@ -15,17 +15,23 @@ import getMapHeight from '../../helpers/map/getMapHeight'
 
 const MAP_MIN_ZOOM = 0.66
 const MAP_MAX_ZOOM = 8
+const MAP_SELECTED_COUNTRY_ZOOM = 3
 const MAP_ZOOM_MULTIPLIER = 1.5
 
 const styles = theme => ({
   root: {
     position: 'relative',
     maxHeight: '80vh',
+    overflow: 'hidden',
   },
   buttonContainer: {
     '& button + button': {
       marginLeft: theme.spacing(3),
     },
+  },
+  switchLabel: {
+    cursor: 'pointer',
+    textTransform: 'capitalize',
   },
 })
 
@@ -66,27 +72,28 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
   }
 
   const handleMapMove = mapDetails => {
-    console.log('mapDetails ', mapDetails)
     setPosition({
       coordinates: mapDetails.coordinates,
       zoom: mapDetails.zoom,
     })
   }
 
-  const handleClick = (event, geo) => {
+  const handleSelectCountry = (event, geo) => {
     const {
       properties: { ISO_A2: countryCode, NAME: countryName },
     } = geo
+    const selectedAreaElement = get(event, 'currentTarget', document.getElementById(countryCode))
 
-    setPosition({ coordinates: geoCentroid(geo), zoom: MAP_MAX_ZOOM })
-    setAnchorEl(event.currentTarget)
+    setPosition({ coordinates: geoCentroid(geo), zoom: MAP_SELECTED_COUNTRY_ZOOM })
+    setAnchorEl(selectedAreaElement)
     setPopoverContent(`${countryCode} ${countryName}`)
     setSelectedCountry(countryCode)
   }
 
   const handleClosePopover = () => {
-    setAnchorEl(null)
     setSelectedCountry(null)
+    setAnchorEl(null)
+    setPopoverContent(null)
   }
 
   const handleMapTypeChange = event => {
@@ -96,19 +103,15 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
   return (
     <div className={classes.root}>
       <div className={classes.buttonContainer}>
-        <Typography component="div">
-          <Grid component="label" container alignItems="center" spacing={1}>
-            <Grid item>
+        <Grid container alignItems="center" spacing={1}>
+          <Grid item>
+            <label className={classes.switchLabel}>
               <Typography variant="caption">for usa citizens</Typography>
-            </Grid>
-            <Grid item>
               <Switch checked={isWorldMapType} onChange={handleMapTypeChange} name="worldUsaSwitcher" />
-            </Grid>
-            <Grid item>
               <Typography variant="caption">worldwide</Typography>
-            </Grid>
+            </label>
           </Grid>
-        </Typography>
+        </Grid>
       </div>
 
       <ComposableMap
@@ -175,7 +178,7 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
                     id={countryCode}
                     key={geo.rsmKey}
                     geography={geo}
-                    onClick={event => handleClick(event, geo)}
+                    onClick={event => handleSelectCountry(event, geo)}
                     onMouseEnter={event => {
                       setTooltipContent(countryName)
                       setTooltipAnchor(event.currentTarget)
@@ -197,11 +200,8 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
 
       <MapSideBar
         geographies={geographies}
-        selectedCountry={selectedCountry}
-        setSelectedCountry={setSelectedCountry}
-        setPosition={setPosition}
-        setAnchorEl={setAnchorEl}
-        setPopoverContent={setPopoverContent}
+        handleSelectCountry={handleSelectCountry}
+        handleClosePopover={handleClosePopover}
         handleZoomIn={handleZoomIn}
         handleZoomOut={handleZoomOut}
       />
