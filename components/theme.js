@@ -25,7 +25,7 @@ const theme = createMuiTheme({
       },
       outlined: {
         border: '1px solid #CCC',
-        padding: '7px 5px',
+        padding: '7px 10px',
       },
       sizeLarge: {
         fontSize: '18px',
@@ -94,24 +94,8 @@ const theme = createMuiTheme({
       },
     },
     MuiOutlinedInput: {
-      input: {
-        padding: '7px 10px',
-        background: '#FFF',
-        border: '1px solid #BFBFBF',
-        '&:hover, &:focus': {
-          border: '1px solid #BFBFBF',
-        },
-        '&::placeholder': {
-          fontSize: '0.875rem',
-          border: 'none',
-          borderRadius: 0,
-        },
-      },
-    },
-    MuiPaper: {
       root: {
         borderRadius: 0,
-        boxShadow: 'none',
       },
     },
     MuiListItemText: {
@@ -119,11 +103,6 @@ const theme = createMuiTheme({
         marginTop: 15,
         marginBottom: 15,
         marginLeft: 30,
-      },
-    },
-    MuiInputLabel: {
-      outlined: {
-        transform: 'translate(14px, 10px) scale(1)',
       },
     },
     MuiSelect: {
