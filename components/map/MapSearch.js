@@ -1,14 +1,12 @@
 import React, { memo, useState, useEffect } from 'react'
-import TextField from '@material-ui/core/TextField'
 import IconButton from '@material-ui/core/IconButton'
-import Autocomplete from '@material-ui/lab/Autocomplete'
 import SearchIcon from '@material-ui/icons/Search'
 import CloseIcon from '@material-ui/icons/Close'
 import { makeStyles } from '@material-ui/core/styles'
 import Slide from '@material-ui/core/Slide'
 import clsx from 'clsx'
 
-import countryToFlag from '../../helpers/countryToFlagCode'
+import CountriesAutoComplete from '../CountriesAutoComplete'
 
 const useStyles = makeStyles(
   theme => ({
@@ -30,7 +28,7 @@ const useStyles = makeStyles(
   { name: 'MapSearch' }
 )
 
-function MapSearch({ geographies, handleSelectCountry, handleClosePopover }) {
+function MapSearch({ geographies, handleCountryChange, handleClosePopover }) {
   const classes = useStyles()
   const [isOpen, setIsOpen] = useState(false)
 
@@ -42,7 +40,7 @@ function MapSearch({ geographies, handleSelectCountry, handleClosePopover }) {
 
   const handleSearch = (event, geoItem) => {
     if (geoItem) {
-      handleSelectCountry(null, geoItem)
+      handleCountryChange(null, geoItem)
 
       setIsOpen(false)
     } else {
@@ -63,28 +61,12 @@ function MapSearch({ geographies, handleSelectCountry, handleClosePopover }) {
       )}
       <Slide direction="right" in={isOpen} mountOnEnter unmountOnExit>
         <div className={clsx([classes.root, classes.searchBarContainer])}>
-          <Autocomplete
+          <CountriesAutoComplete
             id="search-countries"
-            style={{ width: 300 }}
+            style={{ width: 200 }}
             options={geographies}
-            classes={{
-              option: classes.option,
-            }}
-            getOptionLabel={geoItem => geoItem.properties.NAME}
-            renderOption={geoItem => {
-              const {
-                properties: { ISO_A2: countryCode, NAME: countryName },
-              } = geoItem
-              return (
-                <>
-                  <span>{countryToFlag(countryCode)}</span>
-                  {countryName}
-                </>
-              )
-            }}
             onChange={handleSearch}
-            renderInput={params => <TextField {...params} label="Choose a country" variant="outlined" autoFocus />}
-            autoHighlight
+            label="Choose a country"
           />
           {isOpen && (
             <IconButton

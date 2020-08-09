@@ -26,14 +26,14 @@ const useStyles = makeStyles(
   { name: 'MapSideBar' }
 )
 
-function MapSideBar({ geographies, handleClosePopover, handleSelectCountry, handleZoomIn, handleZoomOut }) {
+function MapSideBar({ geographies, handleClosePopover, handleCountryChange, handleZoomIn, handleZoomOut }) {
   const classes = useStyles()
 
   return (
     <div className={classes.sideBar}>
       <MapSearch
         geographies={geographies}
-        handleSelectCountry={handleSelectCountry}
+        handleCountryChange={handleCountryChange}
         handleClosePopover={handleClosePopover}
       />
       <div className={classes.controlButtons}>

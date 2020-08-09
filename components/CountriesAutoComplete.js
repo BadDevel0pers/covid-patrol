@@ -20,12 +20,12 @@ const useStyles = makeStyles(
   { name: 'CountriesAutoComplete' }
 )
 
-function CountriesAutoComplete({ geographies, label, onChange, ...restProps }) {
+function CountriesAutoComplete({ options, label, onChange, ...restProps }) {
   const classes = useStyles()
 
   return (
     <Autocomplete
-      options={geographies}
+      options={options}
       getOptionLabel={geoItem => geoItem.properties.NAME}
       classes={{
         root: classes.root,
