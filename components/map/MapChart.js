@@ -13,6 +13,7 @@ import MapSideBar from './MapSideBar'
 import mapData from '../../helpers/map/mapData'
 import getMapHeight from '../../helpers/map/getMapHeight'
 import MapDestinations from './MapDestinations'
+import MapLegend from './MapLegend'
 
 const MAP_MIN_ZOOM = 0.66
 const MAP_MAX_ZOOM = 8
@@ -201,6 +202,8 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
         <MapPopover anchorEl={anchorEl} onClose={handleClosePopover} content={popoverContent} />
 
         <MapSideBar handleZoomIn={handleZoomIn} handleZoomOut={handleZoomOut} />
+
+        <MapLegend />
       </div>
     </div>
   )
