@@ -10,8 +10,8 @@ import { feature } from 'topojson-client'
 import MapPopover from './MapPopover'
 import MapSideBar from './MapSideBar'
 import mapData from '../../helpers/map/mapData'
+import getMapHeight from '../../helpers/map/getMapHeight'
 
-const MAP_HEIGHT = 300
 const MAP_MIN_ZOOM = 0.66
 const MAP_MAX_ZOOM = 8
 const MAP_ZOOM_MULTIPLIER = 1.5
@@ -41,6 +41,7 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
   const [popoverContent, setPopoverContent] = useState(null)
   const [isWorldMapType, setIsWorldMapType] = useState(true)
   const [selectedCountry, setSelectedCountry] = useState(null)
+  const mapHeight = getMapHeight()
 
   const handleZoomIn = () => {
     if (position.zoom >= MAP_MAX_ZOOM) return
@@ -128,7 +129,7 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
         //   center: position.coordinates,
         //   scale: position.zoom,
         // }}
-        height={MAP_HEIGHT}
+        height={mapHeight}
       >
         <ZoomableGroup
           zoom={position.zoom}
