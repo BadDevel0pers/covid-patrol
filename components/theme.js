@@ -142,8 +142,7 @@ const theme = createMuiTheme({
     },
     background: {
       default: '#fff',
-      footerBottom: '#EEEEEE',
-      footerTop: '#FAFAFA',
+      hover: '#E7E7E7',
     },
     map: {
       default: '#eaeaea',
