@@ -11,12 +11,16 @@ import MapPopover from './MapPopover'
 import MapSideBar from './MapSideBar'
 import mapData from '../../helpers/map/mapData'
 
-const MAP_HEIGHT = 500
+const MAP_HEIGHT = 300
+const MAP_MIN_ZOOM = 0.66
+const MAP_MAX_ZOOM = 8
+const MAP_ZOOM_MULTIPLIER = 1.5
 
 const styles = theme => ({
   root: {
     position: 'relative',
     maxHeight: '80vh',
+    background: '#b7b7b7',
   },
   buttonContainer: {
     '& button + button': {
@@ -32,16 +36,16 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
   const theme = useTheme()
 
   const [geographies] = useState(feature(mapData, mapData.objects[Object.keys(mapData.objects)[0]]).features)
-  const [position, setPosition] = useState({ coordinates: [0, 0], zoom: 1 })
+  const [position, setPosition] = useState({ coordinates: [0, 0], zoom: MAP_MIN_ZOOM })
   const [anchorEl, setAnchorEl] = useState(null)
   const [popoverContent, setPopoverContent] = useState(null)
   const [isWorldMapType, setIsWorldMapType] = useState(true)
   const [selectedCountry, setSelectedCountry] = useState(null)
 
   const handleZoomIn = () => {
-    if (position.zoom >= 8) return
+    if (position.zoom >= MAP_MAX_ZOOM) return
 
-    setPosition(pos => ({ ...pos, zoom: pos.zoom * 1.5 }))
+    setPosition(pos => ({ ...pos, zoom: pos.zoom * MAP_ZOOM_MULTIPLIER }))
 
     if (anchorEl) {
       setAnchorEl(null)
@@ -50,15 +54,17 @@ const MapChart = ({ setTooltipContent, setTooltipAnchor }) => {
   }
 
   const handleZoomOut = () => {
-    if (position.zoom <= 1) return
+    if (position.zoom <= MAP_MIN_ZOOM) return
 
-    setPosition(pos => ({ ...pos, zoom: pos.zoom / 1.5 }))
+    setPosition(pos => ({ ...pos, zoom: pos.zoom / MAP_ZOOM_MULTIPLIER }))
 
     if (anchorEl) {
       setAnchorEl(null)
       setSelectedCountry(null)
     }
   }
+
+  console.log(position)
 
   const handleMapMove = mapDetails => {
     console.log('mapDetails ', mapDetails)
