@@ -1,9 +1,14 @@
 import React, { memo } from 'react'
 import Popover from '@material-ui/core/Popover'
-import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
+import Typography from '@material-ui/core/Typography'
+import { Box } from '@material-ui/core'
+import Rating from '@material-ui/lab/Rating'
+import Divider from '@material-ui/core/Divider'
+import advisoryIcons from '../../helpers/advisoryIcons'
+import countryToFlag from '../../helpers/countryToFlagCode'
 
 const useStyles = makeStyles(
   {
@@ -21,12 +26,34 @@ const useStyles = makeStyles(
       width: 45,
       height: 45,
     },
+    advisoryUpdate: {
+      marginTop: 15,
+    },
+    description: {
+      marginTop: 15,
+      marginBottom: 15,
+    },
+    title: {
+      marginBottom: 15,
+    },
   },
   { name: 'MapPopover' }
 )
 
 function MapPopover({ anchorEl, content, onClose }) {
   const classes = useStyles()
+  const {
+    name,
+    isoName,
+    description,
+    lastUpdate,
+    advisory: { score, updated },
+  } = content
+
+  function IconContainer(props) {
+    const { value, ...other } = props
+    return <span {...other}>{advisoryIcons[value].icon}</span>
+  }
 
   return (
     <Popover
@@ -46,19 +73,33 @@ function MapPopover({ anchorEl, content, onClose }) {
       }}
     >
       <div className={classes.wrapper}>
-        <Typography>{content}</Typography>
-        <Typography>{content}</Typography>
-        <Typography>{content}</Typography>
-        <Typography>
-          {content}
-          {content}
-          {content}
-          {content}
+        <div className={classes.title}>
+          <Typography variant="h4">
+            {countryToFlag(isoName)} {name}
+          </Typography>
+          <Divider />
+        </div>
+        <Box>
+          <Typography variant="caption" component="legend">
+            <b>{isoName}</b> advisory index
+          </Typography>
+          <Rating
+            name="customized-icons"
+            readOnly
+            defaultValue={score}
+            getLabelText={value => advisoryIcons[Math.trunc(value)].label}
+            IconContainerComponent={IconContainer}
+          />
+        </Box>
+        <Typography variant="caption" component="div">
+          Advisory updated: {updated}
         </Typography>
-        <Typography>{content}</Typography>
-        <Typography>{content}</Typography>
-        <Typography>{content}</Typography>
-
+        <Box>
+          <div dangerouslySetInnerHTML={{ __html: description }} className={classes.description} />
+          <Typography variant="caption" className={classes.advisoryUpdate} component="div">
+            Updated: {lastUpdate}
+          </Typography>
+        </Box>
         <IconButton aria-label="close" color="primary" className={classes.closeButton} onClick={onClose}>
           <CloseIcon />
         </IconButton>
