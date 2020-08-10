@@ -16,7 +16,7 @@ This is the first version of visualisation of the destinations available during 
 
 This application has really simple and user friendly interface. On the main application screen user can see covid restrictions map for travelers from all over the world. User has usual abilities to work with a map: the map can be zoomed by click on the plus/minus buttons and drag the map by pressing mouse button and moving cursor.
 
-####Special features of the application map.
+#### Special features of the application map.
 User can hover on country and see tooltip with the country name, if user clicks on the country region, he/she will see detailed information in the popover: country name with flag, country adviser index. It shows user current situation with the covid in the country and helps to find out how safe is travelling to this country with the latest detailed information about covid restrictions.
 
 User can select the country he/she is goin to travel from in the first input box. In this case application will show the world map with entry restrictions from the selected country.
