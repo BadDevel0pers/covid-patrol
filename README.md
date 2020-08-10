@@ -8,7 +8,7 @@ Our goal is to provide a summary for travel advisories from many authorities, no
 
 Our application will help you get a more comprehensive impression for the better trip planning.
 
-This is the first version of visualisation of the destinations available during the pandemia period for the travelers. It shows the world map with the ability to search by origin and destination countries and provides all the necessary information to each one who would like to travel at the nearest time.
+This is the first version of visualisation of the destinations available during the pandemia period for the travellers. It shows the world map with the ability to search by origin and destination countries and provides all the necessary information to each one who would like to travel at the nearest time.
 
 [Demo application](https://covid-patrol-omega.vercel.app)
 
